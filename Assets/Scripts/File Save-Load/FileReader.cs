@@ -4,14 +4,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Resources;
 using UnityEngine;
 
-// TODO: Add functions to save and load other type of resources like Buildings
-// TODO: Remove TempResourceSave struct
 public static class FileReader {
     private static string fileFormat = ".txt";
     private static string resourcesFileName = "Resources";
 
-    public static Resource[] LoadResources() {
-        string filePath = Application.persistentDataPath + "/" + resourcesFileName + fileFormat;
+    public static ResourceData LoadResourceData() {
+        string filePath = Application.persistentDataPath + "/" + GetFileName(FileName.Resources) + fileFormat;
         if (!File.Exists(filePath)) {
             Debug.LogError($"No {filePath} file exist.");
             return default;
@@ -19,7 +17,7 @@ public static class FileReader {
         
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream;
-        TempResourceSave temp;
+        ResourceData resourceData;
         try {
             fileStream = File.Open(filePath, FileMode.Open);
         } catch (Exception exception) {
@@ -28,7 +26,7 @@ public static class FileReader {
         }
         
         try {
-            temp = (TempResourceSave) binaryFormatter.Deserialize(fileStream);
+            resourceData = (ResourceData) binaryFormatter.Deserialize(fileStream);
         } catch (Exception exception) {
             Debug.LogError($"Failed to load resources from {filePath}. Reason: {exception.Message}.");
             throw;
@@ -36,21 +34,20 @@ public static class FileReader {
         
         fileStream.Dispose();
         
-        return temp.resources;
+        return resourceData;
     }
 
-    public static void SaveResources(Resource[] resources) {
-        string filePath = Application.persistentDataPath + "/" + resourcesFileName + fileFormat;
+    public static void SaveResourceData(ResourceData resourceData) {
+        string filePath = Application.persistentDataPath + "/" + GetFileName(FileName.Resources) + fileFormat;
         if (File.Exists(filePath)) {
             File.Delete(filePath);
         }
         
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream = File.Create(filePath);
-        TempResourceSave temp = new TempResourceSave {resources = resources};
 
         try {
-            binaryFormatter.Serialize(fileStream, temp);
+            binaryFormatter.Serialize(fileStream, resourceData);
         } catch (Exception exception) {
             Debug.LogError($"Failed to save resources to {filePath}. Reason: {exception.Message}.");
             throw;
@@ -75,11 +72,6 @@ public static class FileReader {
             default:
                 throw new ArgumentOutOfRangeException(nameof(fileName), fileName, null);
         }
-    }
-    
-    [Serializable]
-    private struct TempResourceSave {
-        public Resource[] resources;
     }
 }
 

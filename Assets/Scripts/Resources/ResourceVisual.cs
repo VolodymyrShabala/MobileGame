@@ -6,17 +6,17 @@ namespace Resources {
         private ResourceManager resourceManager;
         [SerializeField] private GameObject resourcePrefab;
         private TextMeshProUGUI[] resourceText;
-        private Resource[] resources;
+        private ResourceData resourceData;
 
-        public void Init(Resource[] resources) {
-            this.resources = resources;
-            int length = resources.Length;
+        public void Init(ResourceData resourceData) {
+            this.resourceData = resourceData;
+            int length = resourceData.GetNumberOfUnlockedResources();
             resourceText = new TextMeshProUGUI[length];
             for (int i = 0; i < length; i++) {
                 TextMeshProUGUI text = Instantiate(resourcePrefab, transform).GetComponent<TextMeshProUGUI>();
-                Resource resource = resources[i];
+                Resource resource = resourceData.GetResource((ResourceType) i);
 
-                text.text = $"{resource.name}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
+                text.text = $"{resource.resourceType.ToString()}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
                 resourceText[i] = text;
             }
         }

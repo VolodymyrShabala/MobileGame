@@ -13,20 +13,21 @@ namespace Editor.Tests.EditMode.TestFileReader {
         
         [Test, Description("Testing SaveResources function"), Order(0)]
         public void TestSaveResources() {
-            Resource[] resource = new Resource[1];
-            resource[0].amount = 10;
-            resource[0].name = "Food";
-            resource[0].maxStorage = 100;
-            resource[0].gainPerSecond = 2;
-            FileReader.SaveResources(resource);
+            Resource[] resources = new Resource[1];
+            resources[0].amount = 10;
+            resources[0].resourceType = ResourceType.Food;
+            resources[0].maxStorage = 100;
+            resources[0].gainPerSecond = 2;
+            ResourceData resourceData = new ResourceData(resources);
+            FileReader.SaveResourceData(resourceData);
 
             Assert.True(File.Exists(FileReader.GetFilePath(fileName)));
         }
 
         [Test, Description("Testing LoadResources function"), Order(1)]
         public void TestLoadResources() {
-            Resource[] resources = FileReader.LoadResources();
-            Assert.NotNull(resources);
+            ResourceData resourceData = FileReader.LoadResourceData();
+            Assert.NotNull(resourceData);
         }
 
         [Test, Description("Testing DeleteSaveFile function"), Order(2)]

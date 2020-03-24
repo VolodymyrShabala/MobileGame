@@ -3,21 +3,24 @@
 namespace Resources {
     public class ResourceManager : MonoBehaviour {
         [SerializeField] private ResourceVisual resourceVisual;
+        private ResourceData resourceData;
         private Resource[] resources;
         private void Start() {
-            resources = FileReader.LoadResources();
-
-            if (resources == null) { // First time loading game
+            resourceData = FileReader.LoadResourceData();
+            if (resourceData.GetNumberOfUnlockedResources() == 0) {
                 FirstTimeLoad();
             }
 
-            resourceVisual.Init(resources);
+            resourceData.GetResource(ResourceType.Wood);
+            resourceVisual.Init(resourceData);
         }
 
+        // TODO: Move somewhere else
         private void FirstTimeLoad() {
             resources = new Resource[1];
-            resources[0] = new Resource("Food", 0, 10, 0);
-            FileReader.SaveResources(resources);
+            resources[0] = new Resource(ResourceType.Food, 0, 10, 0);
+            resourceData = new ResourceData(resources);
+            FileReader.SaveResourceData(resourceData);
         }
     }
 }
