@@ -1,10 +1,15 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using UnityEngine;
+using Resources;
 
 namespace Editor.Tests.EditMode.TestFileReader {
     public class TestFileReader {
-        private string fileName = "Resources";
+        private string fileName;
+
+        [SetUp]
+        public void Setup() {
+            fileName = FileReader.GetFileName(FileName.Resources);
+        }
         
         [Test, Description("Testing SaveResources function"), Order(0)]
         public void TestSaveResources() {
@@ -13,14 +18,14 @@ namespace Editor.Tests.EditMode.TestFileReader {
             resource[0].name = "Food";
             resource[0].maxStorage = 100;
             resource[0].gainPerSecond = 2;
-            FileReader.SaveResources(resource, fileName);
+            FileReader.SaveResources(resource);
 
             Assert.True(File.Exists(FileReader.GetFilePath(fileName)));
         }
 
         [Test, Description("Testing LoadResources function"), Order(1)]
         public void TestLoadResources() {
-            Resource[] resources = FileReader.LoadResources(fileName);
+            Resource[] resources = FileReader.LoadResources();
             Assert.NotNull(resources);
         }
 
