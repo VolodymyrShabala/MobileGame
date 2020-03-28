@@ -7,14 +7,11 @@ using UnityEngine;
 public static class FileReader {
     private static string fileFormat = ".txt";
     private static string resourcesFileName = "Resources";
+    private static string buildingsFileName = "Buildings";
 
     public static ResourceData LoadResourceData() {
         string filePath = Application.persistentDataPath + "/" + GetFileName(FileName.Resources) + fileFormat;
-        if (!File.Exists(filePath)) {
-            Debug.LogError($"No {filePath} file exist.");
-            return default;
-        }   
-        
+
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream;
         ResourceData resourceData;
@@ -69,10 +66,12 @@ public static class FileReader {
         switch (fileName) {
             case FileName.Resources:
                 return resourcesFileName;
+            case FileName.Buildings:
+                return buildingsFileName;
             default:
                 throw new ArgumentOutOfRangeException(nameof(fileName), fileName, null);
         }
     }
 }
 
-public enum FileName{ Resources }
+public enum FileName{ Resources, Buildings }

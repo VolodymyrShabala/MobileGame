@@ -17,6 +17,7 @@
             this.gainPerSecond = gainPerSecond;
         }
     }
+    
+    public enum ResourceType { Food, Wood }
 }
 
-public enum ResourceType { Food, Wood }

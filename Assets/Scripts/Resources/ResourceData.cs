@@ -1,6 +1,8 @@
-﻿namespace Resources {
+﻿using UnityEngine;
+
+namespace Resources {
     [System.Serializable]
-    public struct ResourceData {
+    public struct ResourceData { // TODO: Look into creating a function returning a ref to a resource to skip all those loops
         private Resource[] unlockedResources; // TODO: Needs to be readonly. List?
 
         public ResourceData(Resource[] unlockedResources) {
@@ -40,7 +42,7 @@
         }
 
         public void Unlock(ResourceType resourceType) {
-            int length = unlockedResources.Length;
+            int length = GetNumberOfUnlockedResources();
             Resource[] temp = new Resource[length + 1];
 
             for (int i = 0; i < length; i++) {
@@ -53,6 +55,20 @@
         public int GetNumberOfUnlockedResources() {
             return unlockedResources.Length;
         }
+
+        public bool IsUnlocked(ResourceType resourceType) {
+            return GetResource(resourceType).resourceType == resourceType;
+        }
+
+        public bool IsEnoughResource(ResourceType resourceType, int amount) {
+            Resource resource = GetResource(resourceType);
+
+            if (resource.resourceType == resourceType) {
+                return resource.amount >= amount;
+            }
+            
+            return false;
+        }
         
         public Resource GetResource(ResourceType resourceType) {
             for (int i = 0; i < unlockedResources.Length; i++) {
@@ -61,17 +77,9 @@
                 }
             }
 
-            return default;
-        }
-        
-        public bool IsUnlocked(ResourceType resourceType) {
-            for (int i = 0; i < unlockedResources.Length; i++) {
-                if (unlockedResources[i].resourceType == resourceType) {
-                    return true;
-                }
-            }
-
-            return false;
+            Debug.Log($"Trying to access locked resource {resourceType}.");
+            return default; // TODO: Look into what can be done here. Problem with default is that I need to have a check
+                            // in every call from this function. 
         }
     }
 }
