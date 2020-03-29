@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Resources;
 using UnityEngine;
 
 public static class FileReader {
@@ -9,33 +8,34 @@ public static class FileReader {
     private static string resourcesFileName = "Resources";
     private static string buildingsFileName = "Buildings";
 
-    public static ResourceData LoadResourceData() {
-        string filePath = Application.persistentDataPath + "/" + GetFileName(FileName.Resources) + fileFormat;
+    public static object LoadData(FileType fileType) {
+        string filePath = Application.persistentDataPath + "/" + GetFileName(fileType) + fileFormat;
 
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream;
-        ResourceData resourceData;
+        object data;
+        
         try {
             fileStream = File.Open(filePath, FileMode.Open);
         } catch (Exception exception) {
-            Debug.LogError($"Couldn't open file at {filePath}. Reason: {exception.Message}.");
-            throw;
+            Debug.Log($"Couldn't open file at {filePath}. Reason: {exception.Message}.");
+            return null;
         }
         
         try {
-            resourceData = (ResourceData) binaryFormatter.Deserialize(fileStream);
+            data = binaryFormatter.Deserialize(fileStream);
         } catch (Exception exception) {
-            Debug.LogError($"Failed to load resources from {filePath}. Reason: {exception.Message}.");
+            Debug.LogError($"Failed to load data from {filePath}. Reason: {exception.Message}.");
             throw;
         }
         
         fileStream.Dispose();
         
-        return resourceData;
+        return data;
     }
 
-    public static void SaveResourceData(ResourceData resourceData) {
-        string filePath = Application.persistentDataPath + "/" + GetFileName(FileName.Resources) + fileFormat;
+    public static void SaveData(FileType fileType, object data) {
+        string filePath = Application.persistentDataPath + "/" + GetFileName(fileType) + fileFormat;
         if (File.Exists(filePath)) {
             File.Delete(filePath);
         }
@@ -44,17 +44,16 @@ public static class FileReader {
         FileStream fileStream = File.Create(filePath);
 
         try {
-            binaryFormatter.Serialize(fileStream, resourceData);
+            binaryFormatter.Serialize(fileStream, data);
         } catch (Exception exception) {
-            Debug.LogError($"Failed to save resources to {filePath}. Reason: {exception.Message}.");
+            Debug.LogError($"Failed to save data to {filePath}. Reason: {exception.Message}.");
             throw;
         } finally {
             fileStream.Dispose();
         }
     }
-
-    public static void DeleteSaveFile(string fileName) {
-        string filePath = Application.persistentDataPath + "/" + fileName + fileFormat;
+  
+    public static void DeleteSaveFile(string filePath) {
         File.Delete(filePath);
     }
 
@@ -62,16 +61,16 @@ public static class FileReader {
         return Application.persistentDataPath + "/" + fileName + fileFormat;
     }
 
-    public static string GetFileName(FileName fileName) {
-        switch (fileName) {
-            case FileName.Resources:
+    public static string GetFileName(FileType fileType) {
+        switch (fileType) {
+            case FileType.Resources:
                 return resourcesFileName;
-            case FileName.Buildings:
+            case FileType.Buildings:
                 return buildingsFileName;
             default:
-                throw new ArgumentOutOfRangeException(nameof(fileName), fileName, null);
+                throw new ArgumentOutOfRangeException(nameof(fileType), fileType, null);
         }
     }
 }
 
-public enum FileName{ Resources, Buildings }
+public enum FileType{ Resources, Buildings }

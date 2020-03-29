@@ -18,9 +18,6 @@ namespace Resources {
                 text.text = $"{resource.resourceType.ToString()}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
                 resourceText[i] = text;
             }
-
-            Resource r = resourceData.GetResource(ResourceType.Wood);
-            Debug.Log($"{r.resourceType.ToString()}, {r.amount}, {r.maxStorage}");
         }
     }
 }

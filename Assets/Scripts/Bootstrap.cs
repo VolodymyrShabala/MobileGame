@@ -22,16 +22,10 @@ public class Bootstrap : MonoBehaviour {
             }
         }
 
-        ResourceData resourceData = ResourceDataLoader.LoadOrCreateResourceData();
+        ResourceData resourceData = (ResourceData) DataLoader.LoadOrCreateData(FileType.Resources);
         ResourceManager resourceManager = new ResourceManager(resourceVisual, resourceData);
         
-        Building[] buildings = new Building[1];
-        buildings[0].buildingType = BuildingType.Farm;
-        buildings[0].buildAmount = 0;
-        buildings[0].description = "Huh";
-        buildings[0].active = true;
-        BuildingData buildingData = new BuildingData(buildings);
-        
+        BuildingData buildingData = (BuildingData) DataLoader.LoadOrCreateData(FileType.Buildings);
         BuildingManager buildingManager = new BuildingManager(buildingVisual, buildingData);
     }
 }

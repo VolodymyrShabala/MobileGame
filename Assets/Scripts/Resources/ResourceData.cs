@@ -10,7 +10,8 @@ namespace Resources {
         }
 
         public void Add(ResourceType resourceType, float amount) {
-            for (int i = 0; i < unlockedResources.Length; i++) {
+            int length = GetNumberOfUnlockedResources();
+            for (int i = 0; i < length; i++) {
                 if (unlockedResources[i].resourceType == resourceType) {
                     unlockedResources[i].amount += amount;
                 }
@@ -18,7 +19,8 @@ namespace Resources {
         }
 
         public void Remove(ResourceType resourceType, float amount) {
-            for (int i = 0; i < unlockedResources.Length; i++) {
+            int length = GetNumberOfUnlockedResources();
+            for (int i = 0; i < length; i++) {
                 if (unlockedResources[i].resourceType == resourceType) {
                     unlockedResources[i].amount -= amount;
                 }
@@ -26,7 +28,8 @@ namespace Resources {
         }
 
         public void IncreaseProduction(ResourceType resourceType, float increase) {
-            for (int i = 0; i < unlockedResources.Length; i++) {
+            int length = GetNumberOfUnlockedResources();
+            for (int i = 0; i < length; i++) {
                 if (unlockedResources[i].resourceType == resourceType) {
                     unlockedResources[i].gainPerSecond += increase;
                 }
@@ -34,7 +37,8 @@ namespace Resources {
         }
 
         public void DecreaseProduction(ResourceType resourceType, float decrease) {
-            for (int i = 0; i < unlockedResources.Length; i++) {
+            int length = GetNumberOfUnlockedResources();
+            for (int i = 0; i < length; i++) {
                 if (unlockedResources[i].resourceType == resourceType) {
                     unlockedResources[i].gainPerSecond -= decrease;
                 }
@@ -71,7 +75,10 @@ namespace Resources {
         }
         
         public Resource GetResource(ResourceType resourceType) {
-            for (int i = 0; i < unlockedResources.Length; i++) {
+            int length = GetNumberOfUnlockedResources();
+
+            for (int i = 0; i < length; i++) {
+                Debug.Log(unlockedResources[i].resourceType);
                 if (unlockedResources[i].resourceType == resourceType) {
                     return unlockedResources[i];
                 }

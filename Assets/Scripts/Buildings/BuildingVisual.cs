@@ -15,7 +15,7 @@ namespace Buildings {
                 TextMeshProUGUI text = Instantiate(buildingPrefab, transform).GetComponent<TextMeshProUGUI>();
                 Building building = buildingData.GetBuilding((BuildingType) i);
 
-                text.text = $"{building.buildingType.ToString()}: {building.buildAmount}, {building.description}";
+                text.text = $"{building.buildingType.ToString()}: {building.amount}, {building.description}";
                 buildingsText[i] = text;
             }
         }

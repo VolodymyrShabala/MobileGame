@@ -579,6 +579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 250787257}
   - component: {fileID: 250787258}
+  - component: {fileID: 250787259}
   m_Layer: 5
   m_Name: VillageScreen
   m_TagString: Untagged
@@ -630,6 +631,20 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &250787259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250787256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90c5babbbb7700c43b620241f616946d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingPrefab: {fileID: 494280276133912044, guid: 36c8474564ee26d42a734e17c7047545,
+    type: 3}
 --- !u!1 &346528035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1987,6 +2002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceVisual: {fileID: 0}
+  buildingVisual: {fileID: 0}
 --- !u!4 &1894206515
 Transform:
   m_ObjectHideFlags: 0

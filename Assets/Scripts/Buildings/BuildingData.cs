@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Buildings {
+    [System.Serializable]
     public struct BuildingData {
         private Building[] unlockedBuildings; // TODO: Needs to be readonly. List?
 
@@ -11,7 +12,7 @@ namespace Buildings {
         public void Build(BuildingType buildingType, int amount) {
             for (int i = 0; i < unlockedBuildings.Length; i++) {
                 if (unlockedBuildings[i].buildingType == buildingType) {
-                    unlockedBuildings[i].buildAmount += amount;
+                    unlockedBuildings[i].amount += amount;
                 }
             }
         }
@@ -19,7 +20,7 @@ namespace Buildings {
         public void Remove(BuildingType buildingType, int amount) {
             for (int i = 0; i < unlockedBuildings.Length; i++) {
                 if (unlockedBuildings[i].buildingType == buildingType) {
-                    unlockedBuildings[i].buildAmount -= amount;
+                    unlockedBuildings[i].amount -= amount;
                 }
             }
         }

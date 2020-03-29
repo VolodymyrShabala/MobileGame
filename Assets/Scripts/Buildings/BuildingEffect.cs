@@ -1,5 +1,6 @@
 ﻿namespace Buildings {
-    public class BuildingEffect  {
+    [System.Serializable]
+    public struct BuildingEffect  {
     
     }
 }
