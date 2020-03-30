@@ -8,9 +8,19 @@ namespace Resources {
         private ResourceData resourceData;
 
         public void Init(ResourceData resourceData) {
+            if (!resourcePrefab) {
+                Debug.LogError($"No resourcePrefab is assigned in {name}. Aborting game startup.");
+                return;
+            }
+            
             this.resourceData = resourceData;
+            CreateResourceText();
+        }
+
+        private void CreateResourceText() {
             int length = resourceData.GetNumberOfResources();
             resourceText = new TextMeshProUGUI[length];
+            
             for (int i = 0; i < length; i++) {
                 if (!resourceData.IsUnlockedResource(i)) {
                     continue;

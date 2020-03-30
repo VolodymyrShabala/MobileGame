@@ -1,13 +1,17 @@
 ﻿namespace Resources {
     public class ResourceManager {
-         private ResourceVisual resourceVisual;
-        private ResourceData resourceData;
+        private ResourceVisual resourceVisual;
+        private readonly ResourceData resourceData;
+
         public ResourceManager(ResourceVisual resourceVisual, ResourceData resourceData) {
             if (!resourceVisual) {
-                UnityEngine.Debug.LogError($"There is no resourceVisual assigned in ResourceManager. Aborting game startup");
+                UnityEngine
+                        .Debug
+                        .LogError($"There is no resourceVisual assigned in ResourceManager. Aborting game startup");
+
                 return;
             }
-            
+
             this.resourceVisual = resourceVisual;
             this.resourceData = resourceData;
             resourceVisual.Init(resourceData);
@@ -24,7 +28,7 @@
         public void IncreaseProductionResource(ResourceType resourceType, float amount) {
             resourceData.IncreaseProduction(GetResourceIndex(resourceType), amount);
         }
-        
+
         public void DecreaseProductionResource(ResourceType resourceType, float amount) {
             resourceData.DecreaseProduction(GetResourceIndex(resourceType), amount);
         }

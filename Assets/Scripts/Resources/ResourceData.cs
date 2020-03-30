@@ -1,6 +1,6 @@
 ﻿namespace Resources {
     [System.Serializable]
-    public struct ResourceData {
+    public readonly struct ResourceData {
         private readonly Resource[] resources; // TODO: Needs to be readonly. List?
 
         public ResourceData(Resource[] resources) {

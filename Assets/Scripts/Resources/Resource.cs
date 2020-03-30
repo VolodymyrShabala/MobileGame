@@ -10,7 +10,7 @@
         // TODO: Add What buildings buffs production and opposite
         
         
-        public Resource(ResourceType resourceType, float amount, float maxStorage, float gainPerSecond, bool unlocked) {
+        public Resource(ResourceType resourceType, float amount, float maxStorage, float gainPerSecond, bool unlocked = false) {
             this.resourceType = resourceType;
             this.amount = amount;
             this.maxStorage = maxStorage;

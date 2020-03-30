@@ -1,6 +1,10 @@
 ﻿namespace Buildings {
     [System.Serializable]
-    public struct BuildingEffect  {
-    
+    public readonly struct BuildingEffect {
+        public readonly string test;
+
+        public BuildingEffect(string test) {
+            this.test = test;
+        }
     }
 }
