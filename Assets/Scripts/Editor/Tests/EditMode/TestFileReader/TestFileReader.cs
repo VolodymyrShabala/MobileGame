@@ -9,7 +9,7 @@ namespace Editor.Tests.EditMode.TestFileReader {
         [Test, Description("Testing SaveResources function"), Order(0)]
         public void TestSaveResources() {
             Resource[] resources = new Resource[1];
-            resources[0] = new Resource(ResourceType.Food, 0, 10, 0);
+            resources[0] = new Resource(ResourceType.Food, 0, 10, 0, true);
             ResourceData resourceData = new ResourceData(resources);
             FileReader.SaveData(FileType.Resources, resourceData);
 

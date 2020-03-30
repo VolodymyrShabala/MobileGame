@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+// TODO: Change to JSon
 public static class FileReader {
     private static string fileFormat = ".txt";
     private static string resourcesFileName = "Resources";

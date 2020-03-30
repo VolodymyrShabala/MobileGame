@@ -12,8 +12,14 @@ public static class DataLoader {
     private static object CreateData(FileType fileType) {
         switch (fileType) {
             case FileType.Resources:
-                Resource[] resources = new Resource[1];
-                resources[0] = new Resource(ResourceType.Food, 1, 10, 0);
+                int length = (int) ResourceType.MAX;
+                Resource[] resources = new Resource[length];
+                resources[0] = new Resource((ResourceType) 0, 0, 10, 0, true);
+
+                for (int i = 1; i < length; i++) {
+                    resources[i] = new Resource((ResourceType) i, 0, 0, 0, false);
+                }
+                
                 ResourceData resourceData = new ResourceData(resources);
                 return resourceData;
             case FileType.Buildings:
