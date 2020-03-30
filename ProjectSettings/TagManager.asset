@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 457776041
+    locked: 0
+  - name: Upper Panel
+    uniqueID: 369761403
+    locked: 0
+  - name: Left Panel
+    uniqueID: 1753955883
+    locked: 0
+  - name: Right Panel
+    uniqueID: 3422008557
+    locked: 0
