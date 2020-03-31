@@ -5,16 +5,16 @@
         public string description;
         public BuildingCost[] buildingCosts;
         public int amount;
-        public BuildingEffect buildingEffect;
+        public BuildingEffect[] buildingEffects;
         public bool active;
         public bool unlocked;
 
-        public Building(BuildingType buildingType, string description, BuildingCost[] buildingCosts, int amount, BuildingEffect buildingEffect, bool active, bool unlocked = false) {
+        public Building(BuildingType buildingType, string description, BuildingCost[] buildingCosts, int amount, BuildingEffect[] buildingEffects, bool active, bool unlocked = false) {
             this.buildingType = buildingType;
             this.description = description;
             this.buildingCosts = buildingCosts;
             this.amount = amount;
-            this.buildingEffect = buildingEffect;
+            this.buildingEffects = buildingEffects;
             this.active = active;
             this.unlocked = unlocked;
         }

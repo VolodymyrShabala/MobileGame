@@ -19,7 +19,7 @@ namespace Editor.Tests.EditMode.TestFileReader {
         [Test, Description("Testing SaveBuildings function"), Order(0)]
         public void TestSaveBuildings() {
             Building[] buildings = new Building[1];
-            buildings[0] = new Building(BuildingType.Farm, "Farm", new BuildingCost[0], 0, new BuildingEffect(), true);
+            buildings[0] = new Building(BuildingType.Farm, "Farm", new BuildingCost[0], 0, new BuildingEffect[0], true);
             BuildingData buildingData = new BuildingData(buildings);
             FileReader.SaveData(FileType.Buildings, buildingData);
             

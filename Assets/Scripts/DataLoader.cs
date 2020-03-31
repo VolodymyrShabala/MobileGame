@@ -14,7 +14,7 @@ public static class DataLoader {
             case FileType.Resources:
                 int length = (int) ResourceType.MAX;
                 Resource[] resources = new Resource[length];
-                resources[0] = new Resource((ResourceType) 0, 0, 10, 0, true);
+                resources[0] = new Resource((ResourceType) 0, 1, 10, 0, true);
 
                 for (int i = 1; i < length; i++) {
                     resources[i] = new Resource((ResourceType) i, 0, 0, 0, false);
@@ -24,7 +24,7 @@ public static class DataLoader {
                 return resourceData;
             case FileType.Buildings:
                 Building[] buildings = new Building[1];
-                buildings[0] = new Building(BuildingType.Farm, "Farm", new BuildingCost[0], 2, new BuildingEffect(), true);
+                buildings[0] = new Building(BuildingType.Farm, "Farm", new BuildingCost[0], 2, new BuildingEffect[0], true);
                 BuildingData buildingData = new BuildingData(buildings);
                 return buildingData;
             default:
