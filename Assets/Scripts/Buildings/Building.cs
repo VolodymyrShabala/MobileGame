@@ -1,6 +1,6 @@
 ﻿namespace Buildings {
     [System.Serializable]
-    public struct Building {
+    public class Building {
         public readonly BuildingType buildingType;
         public string description;
         public BuildingCost[] buildingCosts;

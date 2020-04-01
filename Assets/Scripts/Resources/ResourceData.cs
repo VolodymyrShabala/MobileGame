@@ -22,6 +22,14 @@
         public void DecreaseProduction(int index, float amount) {
             resources[index].gainPerSecond -= amount;
         }
+        
+        public void IncreaseStorage(int index, float amount) {
+            resources[index].maxStorage += amount;
+        }
+
+        public void DecreaseStorage(int index, float amount) {
+            resources[index].maxStorage -= amount;
+        }
 
         public void UnlockResource(int index) {
             resources[index].unlocked = true;

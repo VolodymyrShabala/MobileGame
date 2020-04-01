@@ -2,41 +2,37 @@
     public class BuildingManager {
         private BuildingVisual buildingVisual;
         private readonly BuildingData buildingData;
+        private readonly BuildingEffectManager effectManager;
 
-        public BuildingManager(BuildingVisual buildingVisual, BuildingData buildingData) {
+        public BuildingManager(BuildingVisual buildingVisual, BuildingEffectManager effectManager, BuildingData buildingData) {
             this.buildingVisual = buildingVisual;
+            this.effectManager = effectManager;
             this.buildingData = buildingData;
 
-            buildingVisual.Init(buildingData);
+            // TODO: Bootstrap should initialize this
+            buildingVisual.Init(buildingData, this);
         }
 
         public void Build(BuildingType buildingType, int amount = 1) {
-            buildingData.Build(GetBuildingIndex(buildingType), amount);
+            int buildingIndex = (int) buildingType;
+            buildingData.Build(buildingIndex, amount);
+            effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
         
         public void Remove(BuildingType buildingType, int amount = 1) {
-            buildingData.Remove(GetBuildingIndex(buildingType), amount);
+            buildingData.Remove((int) buildingType, amount);
         }
         
         public void Unlock(BuildingType buildingType) {
-            buildingData.Unlock(GetBuildingIndex(buildingType));
+            buildingData.Unlock((int) buildingType);
         }
         
         public bool IsUnlocked(BuildingType buildingType) {
-            return buildingData.IsUnlocked(GetBuildingIndex(buildingType));
+            return buildingData.IsUnlocked((int) buildingType);
         }
 
-        private int GetBuildingIndex(BuildingType buildingType) {
-            int length = buildingData.GetBuildingsAmount();
-
-            for (int i = 0; i < length; i++) {
-                if (buildingData.GetBuilding(i).buildingType == buildingType) {
-                    return i;
-                }
-            }
-            UnityEngine.Debug.LogError($"Trying to access non existent building type {buildingType}.");
-
-            return -1;
+        public bool InEnoughResources(Building building) {
+            return false;
         }
     }
 }

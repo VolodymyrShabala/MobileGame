@@ -9,12 +9,13 @@ public static class DataLoader {
         return data ?? CreateData(fileType);
     }
 
+    // TODO: Change to read from file
     private static object CreateData(FileType fileType) {
         switch (fileType) {
             case FileType.Resources:
                 int length = (int) ResourceType.MAX;
                 Resource[] resources = new Resource[length];
-                resources[0] = new Resource((ResourceType) 0, 1, 10, 0, true);
+                resources[0] = new Resource(0, 1, 10, 0, true);
 
                 for (int i = 1; i < length; i++) {
                     resources[i] = new Resource((ResourceType) i, 0, 0, 0, false);
@@ -23,8 +24,15 @@ public static class DataLoader {
                 ResourceData resourceData = new ResourceData(resources);
                 return resourceData;
             case FileType.Buildings:
-                Building[] buildings = new Building[1];
-                buildings[0] = new Building(BuildingType.Farm, "Farm", new BuildingCost[0], 2, new BuildingEffect[0], true);
+                length = (int) BuildingType.MAX;
+                Building[] buildings = new Building[length];
+                BuildingEffect[] effects = new BuildingEffect[1];
+                effects[0] = new BuildingEffect(BuildingEffectType.IncreaseResourceProduction, ResourceType.Food, 10);
+                buildings[0] = new Building(BuildingType.Farm, "Farm", new BuildingCost[0], 2, effects, true);
+                
+                for (int i = 1; i < length; i++) {
+                    buildings[i] = new Building((BuildingType) i, $"Building {i}", new BuildingCost[0], i, new BuildingEffect[0], false);
+                }
                 BuildingData buildingData = new BuildingData(buildings);
                 return buildingData;
             default:

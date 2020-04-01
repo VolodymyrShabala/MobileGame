@@ -1,14 +1,13 @@
-﻿namespace Resources {
+﻿using UnityEngine;
+
+namespace Resources {
     public class ResourceManager {
-        private ResourceVisual resourceVisual;
+        private readonly ResourceVisual resourceVisual;
         private readonly ResourceData resourceData;
 
         public ResourceManager(ResourceVisual resourceVisual, ResourceData resourceData) {
             if (!resourceVisual) {
-                UnityEngine
-                        .Debug
-                        .LogError($"There is no resourceVisual assigned in ResourceManager. Aborting game startup");
-
+                Debug.LogError($"There is no resourceVisual assigned in ResourceManager. Aborting game startup");
                 return;
             }
 
@@ -18,44 +17,51 @@
         }
 
         public void AddResource(ResourceType resourceType, float amount) {
-            resourceData.Add(GetResourceIndex(resourceType), amount);
+            int resourceIndex = (int) resourceType;
+            resourceData.Add(resourceIndex, amount);
+            resourceVisual.UpdateResource(resourceIndex);
         }
 
         public void RemoveResource(ResourceType resourceType, float amount) {
-            resourceData.Remove(GetResourceIndex(resourceType), amount);
+            resourceData.Remove((int) resourceType, amount);
         }
 
-        public void IncreaseProductionResource(ResourceType resourceType, float amount) {
-            resourceData.IncreaseProduction(GetResourceIndex(resourceType), amount);
+        public void IncreaseProduction(ResourceType resourceType, float amount) {
+            int resourceIndex = (int) resourceType;
+            resourceData.IncreaseProduction(resourceIndex, amount);
+            resourceVisual.UpdateResource(resourceIndex);
         }
 
-        public void DecreaseProductionResource(ResourceType resourceType, float amount) {
-            resourceData.DecreaseProduction(GetResourceIndex(resourceType), amount);
+        public void DecreaseProduction(ResourceType resourceType, float amount) {
+            int resourceIndex = (int) resourceType;
+            resourceData.DecreaseProduction(resourceIndex, amount);
+            resourceVisual.UpdateResource(resourceIndex);
         }
 
         public void UnlockResource(ResourceType resourceType) {
-            resourceData.UnlockResource(GetResourceIndex(resourceType));
+            int resourceIndex = (int) resourceType;
+            resourceData.UnlockResource(resourceIndex);
+            resourceVisual.UpdateResource(resourceIndex);
         }
 
         public bool IsUnlockedResource(ResourceType resourceType) {
-            return resourceData.IsUnlockedResource(GetResourceIndex(resourceType));
+            return resourceData.IsUnlockedResource((int) resourceType);
         }
 
         public bool InEnoughResources(ResourceType resourceType, float amount) {
-            return resourceData.IsEnoughResource(GetResourceIndex(resourceType), amount);
+            return resourceData.IsEnoughResource((int) resourceType, amount);
         }
 
-        private int GetResourceIndex(ResourceType resourceType) {
-            int length = resourceData.GetNumberOfResources();
+        public void IncreaseStorage(ResourceType resourceType, float amount) {
+            int resourceIndex = (int) resourceType;
+            resourceData.IncreaseStorage(resourceIndex, amount);
+            resourceVisual.UpdateResource(resourceIndex);
+        }
 
-            for (int i = 0; i < length; i++) {
-                if (resourceData.GetResource(i).resourceType == resourceType) {
-                    return i;
-                }
-            }
-
-            UnityEngine.Debug.LogError($"Trying to access non existent resource {resourceType}.");
-            return -1;
+        public void DecreaseStorage(ResourceType resourceType, float amount) {
+            int resourceIndex = (int) resourceType;
+            resourceData.DecreaseStorage(resourceIndex, amount);
+            resourceVisual.UpdateResource(resourceIndex);
         }
     }
 }

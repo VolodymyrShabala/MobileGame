@@ -538,8 +538,9 @@ GameObject:
   - component: {fileID: 2441950897301360553}
   - component: {fileID: 2441950897301360567}
   - component: {fileID: 6904927009284770094}
+  - component: {fileID: 6548788318072708744}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: NameAndAmount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -703,9 +704,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0, g: 0.15109777, b: 1, a: 1}
+    m_PressedColor: {r: 0, g: 1, b: 0.14202738, a: 1}
+    m_SelectedColor: {r: 0.9622642, g: 0.9172792, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -721,7 +722,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2441950897301360553}
+  m_TargetGraphic: {fileID: 2441950897992526459}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -746,6 +747,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &6548788318072708744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2441950897301360555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &2441950897302915679
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,11 +1239,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3020e096f14d2c34e929e3be3507c809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: {fileID: 2441950897301360553}
+  buildingNameAndAmount: {fileID: 2441950897301360553}
   buildingDescription: {fileID: 2441950896942339999}
   buildingCostParent: {fileID: 2441950898442621131}
   buildingEffectParent: {fileID: 2441950896558106069}
-  buildButton: {fileID: 2441950897992526458}
+  buildButtons:
+  - {fileID: 2441950897992526458}
+  - {fileID: 2441950897301360567}
   defaultTextPrefab: {fileID: 5136897808174660456, guid: 36c8474564ee26d42a734e17c7047545,
     type: 3}
   collapsibleButton: {fileID: 2441950897779188248}

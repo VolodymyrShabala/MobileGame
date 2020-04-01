@@ -17,6 +17,11 @@ namespace Resources {
             CreateResourceText();
         }
 
+        public void UpdateResource(int index) {
+            Resource resource = resourceData.GetResource(index);
+            resourceText[index].text = $"{resource.resourceType.ToString()}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
+        }
+
         private void CreateResourceText() {
             int length = resourceData.GetNumberOfResources();
             resourceText = new TextMeshProUGUI[length];
