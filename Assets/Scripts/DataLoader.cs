@@ -27,7 +27,7 @@ public static class DataLoader {
                 length = (int) BuildingType.MAX;
                 Building[] buildings = new Building[length];
                 BuildingEffect[] effects = new BuildingEffect[1];
-                effects[0] = new BuildingEffect(BuildingEffectType.IncreaseResourceProduction, ResourceType.Food, 10);
+                effects[0] = new BuildingEffect(BuildingEffectType.IncreaseResourceProduction, ResourceType.Food, 1);
                 buildings[0] = new Building(BuildingType.Farm, "Farm", new BuildingCost[0], 0, effects, true);
 
                 for (int i = 1; i < length; i++) {

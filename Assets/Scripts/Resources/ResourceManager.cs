@@ -13,10 +13,11 @@ namespace Resources {
 
             this.resourceVisual = resourceVisual;
             this.resourceData = resourceData;
-        }
-
-        public void Update(float deltaTime) {
-            resourceData.Update(deltaTime);
+            
+            Tick.instance.UpdateFunc(delegate () {
+                resourceData.Update();
+                resourceVisual.UpdateResources();
+                 });
         }
 
         public void AddResource(ResourceType resourceType, float amount) {

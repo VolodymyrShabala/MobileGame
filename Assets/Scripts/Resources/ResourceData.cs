@@ -7,10 +7,10 @@
             this.resources = resources;
         }
 
-        public void Update(float deltaTime) {
+        public void Update() {
             int length = GetNumberOfResources();
             for (int i = 0; i < length; i++) {
-                resources[i].Update(deltaTime);
+                resources[i].Update();
             }
         }
 

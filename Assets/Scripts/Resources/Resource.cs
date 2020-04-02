@@ -18,12 +18,12 @@
             this.unlocked = unlocked;
         }
 
-        public void Update(float deltaTime) {
+        public void Update() {
             if (!unlocked) {
                 return;
             }
 
-            amount += gainPerSecond * deltaTime;
+            amount += gainPerSecond;
 
             if (amount >= maxStorage) {
                 amount = maxStorage;

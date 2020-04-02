@@ -28,8 +28,6 @@ public static class FileReader {
 
         try {
             gameSaveString = File.ReadAllText(filePath);
-            Debug.Log(gameSaveString);
-
         } catch (Exception exception) {
             Debug.Log($"Couldn't read file at {filePath}. Reason: {exception.Message}.");
             throw;
@@ -37,15 +35,11 @@ public static class FileReader {
 
         try {
             gameSave = JsonUtility.FromJson<GameSave>(gameSaveString);
-            Debug.Log(gameSave);
-
         } catch (Exception exception) {
             Debug.Log($"Couldn't parse GameSave at {filePath}. Reason: {exception.Message}.");
             throw;
         }
-
-        Debug.Log(gameSave.resourceData);
-        Debug.Log(gameSave.buildingData);
+        
         return gameSave;
     }
 
