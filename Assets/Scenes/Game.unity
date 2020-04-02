@@ -496,6 +496,7 @@ GameObject:
   - component: {fileID: 232905199}
   - component: {fileID: 232905198}
   - component: {fileID: 232905200}
+  - component: {fileID: 232905201}
   m_Layer: 5
   m_Name: Screen
   m_TagString: Untagged
@@ -591,6 +592,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &232905201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232905196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &250787256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1957,8 +1970,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb108b1739037849a0486dca4601667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceVisual: {fileID: 0}
-  buildingVisual: {fileID: 0}
+  resourceVisual: {fileID: 725052651}
+  buildingVisual: {fileID: 250787259}
 --- !u!4 &1894206515
 Transform:
   m_ObjectHideFlags: 0

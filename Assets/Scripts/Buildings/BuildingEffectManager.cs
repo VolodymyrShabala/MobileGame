@@ -50,7 +50,7 @@ namespace Buildings {
             }
         }
 
-        public void RemoveEffects(BuildingEffect[] effects, ResourceManager resourceManager) {
+        public void RemoveEffects(BuildingEffect[] effects) {
             int length = effects.Length;
 
             for (int i = 0; i < length; i++) {

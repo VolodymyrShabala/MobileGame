@@ -13,7 +13,10 @@ namespace Resources {
 
             this.resourceVisual = resourceVisual;
             this.resourceData = resourceData;
-            resourceVisual.Init(resourceData);
+        }
+
+        public void Update(float deltaTime) {
+            resourceData.Update(deltaTime);
         }
 
         public void AddResource(ResourceType resourceType, float amount) {

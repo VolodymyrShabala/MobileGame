@@ -7,6 +7,13 @@
             this.resources = resources;
         }
 
+        public void Update(float deltaTime) {
+            int length = GetNumberOfResources();
+            for (int i = 0; i < length; i++) {
+                resources[i].Update(deltaTime);
+            }
+        }
+
         public void Add(int index, float amount) {
             resources[index].amount += amount;
         }

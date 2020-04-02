@@ -18,10 +18,6 @@ namespace Buildings {
             CreateBuildingButtons(buildingManager);
         }
 
-        public void UpdateButton(BuildingType buildingType) {
-            //buildingButtons[(int) buildingType].Update();
-        }
-
         private void CreateBuildingButtons(BuildingManager buildingManager) {
             int length = buildingData.GetBuildingsAmount();
             buildingButtons = new BuildingButton[length];

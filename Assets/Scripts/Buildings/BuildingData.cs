@@ -1,7 +1,7 @@
 ﻿namespace Buildings {
     [System.Serializable]
     public readonly struct BuildingData {
-        private readonly Building[] buildings; // TODO: Needs to be readonly. List?
+        private readonly Building[] buildings;
 
         public BuildingData(Building[] buildings) {
             this.buildings = buildings;
@@ -17,6 +17,14 @@
 
         public void Unlock(int index) {
             buildings[index].unlocked = true;
+        }
+
+        public void Enable(int index) {
+            buildings[index].active = true;
+        }
+
+        public void Disable(int index) {
+            buildings[index].active = false;
         }
 
         public bool IsUnlocked(int index) {
