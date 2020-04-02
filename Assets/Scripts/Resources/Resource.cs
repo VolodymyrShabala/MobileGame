@@ -29,6 +29,10 @@
                 amount = maxStorage;
             }
         }
+
+        public override string ToString() {
+            return $"{resourceType.ToString()}: {amount}/{maxStorage}({gainPerSecond})";
+        }
     }
 
     public enum ResourceType { Food, Wood, Iron, MAX }

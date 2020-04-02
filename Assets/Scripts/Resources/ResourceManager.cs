@@ -14,7 +14,7 @@ namespace Resources {
             this.resourceVisual = resourceVisual;
             this.resourceData = resourceData;
             
-            Tick.instance.UpdateFunc(delegate () {
+            Tick.instance.UpdateFunc(delegate {
                 resourceData.Update();
                 resourceVisual.UpdateResources();
                  });

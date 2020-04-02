@@ -24,18 +24,13 @@ namespace Resources {
                 if (!resourceData.IsUnlockedResource(i)) {
                     continue;
                 }
-                
-                Resource resource = resourceData.GetResource(i);
-                resourceText[i].text =
-                        $"{resource.resourceType.ToString()}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
+
+                resourceText[i].text = resourceData.GetResource(i).ToString();
             }
         }
 
         public void UpdateResource(int index) {
-            Resource resource = resourceData.GetResource(index);
-
-            resourceText[index].text =
-                    $"{resource.resourceType.ToString()}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
+            resourceText[index].text = resourceData.GetResource(index).ToString();
         }
 
         private void CreateResourceText() {
@@ -48,11 +43,7 @@ namespace Resources {
                 }
 
                 TextMeshProUGUI text = Instantiate(resourcePrefab, transform).GetComponent<TextMeshProUGUI>();
-                Resource resource = resourceData.GetResource(i);
-
-                text.text =
-                        $"{resource.resourceType.ToString()}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
-
+                text.text = resourceData.GetResource(i).ToString();
                 resourceText[i] = text;
             }
         }
