@@ -1,18 +1,18 @@
 ﻿namespace Resources {
-    [System.Serializable] // Added to be able to save in FileReader
+    [System.Serializable]
     public struct Resource {
-        public ResourceType resourceType;
-        public float amount;
+        public string name;
+        public float storedAmount;
         public float maxStorage;
         public float gainPerSecond;
         public bool unlocked;
         // TODO: Add consumption info
         // TODO: Add What buildings buffs production and opposite
 
-        public Resource(ResourceType resourceType, float amount, float maxStorage, float gainPerSecond,
+        public Resource(string name, float storedAmount = 0, float maxStorage = 0, float gainPerSecond = 0,
                         bool unlocked = false) {
-            this.resourceType = resourceType;
-            this.amount = amount;
+            this.name = name;
+            this.storedAmount = storedAmount;
             this.maxStorage = maxStorage;
             this.gainPerSecond = gainPerSecond;
             this.unlocked = unlocked;
@@ -23,17 +23,15 @@
                 return;
             }
 
-            amount += gainPerSecond;
+            storedAmount += gainPerSecond;
 
-            if (amount >= maxStorage) {
-                amount = maxStorage;
+            if (storedAmount >= maxStorage) {
+                storedAmount = maxStorage;
             }
         }
 
         public override string ToString() {
-            return $"{resourceType.ToString()}: {amount}/{maxStorage}({gainPerSecond})";
+            return $"{name}: {storedAmount}/{maxStorage}({gainPerSecond})";
         }
     }
-
-    public enum ResourceType { Food, Wood, Iron, MAX }
 }

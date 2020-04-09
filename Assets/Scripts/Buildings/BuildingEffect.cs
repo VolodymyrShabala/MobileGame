@@ -1,15 +1,13 @@
-﻿using Resources;
-
-namespace Buildings {
+﻿namespace Buildings {
     [System.Serializable]
-    public readonly struct BuildingEffect {
-        public readonly BuildingEffectType effectType;
-        public readonly ResourceType resourceType;
-        public readonly float amount;
+    public struct BuildingEffect {
+        public BuildingEffectType effectType; // TODO: Remove
+        public int resourceIndex;
+        public float amount;
 
-        public BuildingEffect(BuildingEffectType effectType, ResourceType resourceType, float amount) {
+        public BuildingEffect(BuildingEffectType effectType, int resourceIndex, float amount) {
             this.effectType = effectType;
-            this.resourceType = resourceType;
+            this.resourceIndex = resourceIndex;
             this.amount = amount;
         }
 

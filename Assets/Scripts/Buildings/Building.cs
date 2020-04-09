@@ -1,24 +1,23 @@
 ﻿namespace Buildings {
     [System.Serializable]
     public class Building {
-        public readonly BuildingType buildingType;
+        public string name;
         public string description;
         public BuildingCost[] buildingCosts;
-        public int amount;
         public BuildingEffect[] buildingEffects;
-        public bool active;
+        public int amount;
+        public bool enabled;
         public bool unlocked;
 
-        public Building(BuildingType buildingType, string description, BuildingCost[] buildingCosts, int amount, BuildingEffect[] buildingEffects, bool active, bool unlocked = false) {
-            this.buildingType = buildingType;
+        public Building(string name, string description, BuildingCost[] buildingCosts, BuildingEffect[] buildingEffects,
+                        int amount = 0, bool enabled = true, bool unlocked = false) {
+            this.name = name;
             this.description = description;
             this.buildingCosts = buildingCosts;
-            this.amount = amount;
             this.buildingEffects = buildingEffects;
-            this.active = active;
+            this.amount = amount;
+            this.enabled = enabled;
             this.unlocked = unlocked;
         }
     }
-    
-    public enum BuildingType { Farm, Sawmill, MAX }
 }

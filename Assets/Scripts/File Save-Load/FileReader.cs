@@ -1,124 +1,99 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Buildings;
-using Resources;
 using UnityEngine;
 
 public static class FileReader {
-    private static string fileFormat = ".txt";
-    private static string resourcesFileName = "Resources";
-    private static string buildingsFileName = "Buildings";
+    private static string defaultGameSaveFile = "/DefaultGameSave.txt";
+    private static string gameSaveFile = "/GameSave.txt";
+
 
     public static void SaveGame(GameSave gameSave) {
-        string filePath = Application.persistentDataPath + "/GameSave.txt";
+        string filepath = Application.persistentDataPath + gameSaveFile;
 
-        if (File.Exists(filePath)) {
-            File.Delete(filePath);
-        }
-
-        string json = JsonUtility.ToJson(gameSave);
-        File.WriteAllText(filePath, json);
-    }
-
-    public static GameSave LoadGame() {
-        string filePath = Application.persistentDataPath + "/GameSave.txt";
-        GameSave gameSave;
-        string gameSaveString;
-
-        try {
-            gameSaveString = File.ReadAllText(filePath);
-        } catch (Exception exception) {
-            Debug.Log($"Couldn't read file at {filePath}. Reason: {exception.Message}.");
-            throw;
-        }
-
-        try {
-            gameSave = JsonUtility.FromJson<GameSave>(gameSaveString);
-        } catch (Exception exception) {
-            Debug.Log($"Couldn't parse GameSave at {filePath}. Reason: {exception.Message}.");
-            throw;
-        }
-        
-        return gameSave;
-    }
-
-    public static object LoadData(FileType fileType) {
-        string filePath = Application.persistentDataPath + "/" + GetFileName(fileType) + fileFormat;
-
-        BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream fileStream;
-        object data;
-
-        try {
-            fileStream = File.Open(filePath, FileMode.Open);
-        } catch (Exception exception) {
-            Debug.Log($"Couldn't open file at {filePath}. Reason: {exception.Message}.");
-            return null;
-        }
-
-        try {
-            data = binaryFormatter.Deserialize(fileStream);
-        } catch (Exception exception) {
-            Debug.LogError($"Failed to load data from {filePath}. Reason: {exception.Message}.");
-            throw;
-        }
-
-        fileStream.Dispose();
-
-        return data;
-    }
-
-    public static void SaveData(FileType fileType, object data) {
-        string filePath = Application.persistentDataPath + "/" + GetFileName(fileType) + fileFormat;
-
-        if (File.Exists(filePath)) {
-            File.Delete(filePath);
+        if (File.Exists(filepath)) {
+            File.Delete(filepath);
         }
 
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream fileStream = File.Create(filePath);
+        FileStream fileStream = File.Create(filepath);
 
         try {
-            binaryFormatter.Serialize(fileStream, data);
+            binaryFormatter.Serialize(fileStream, gameSave);
         } catch (Exception exception) {
-            Debug.LogError($"Failed to save data to {filePath}. Reason: {exception.Message}.");
+            Debug.LogError($"Failed to save data to {filepath}. Reason: {exception.Message}.");
             throw;
         } finally {
             fileStream.Dispose();
         }
     }
 
-    public static void DeleteSaveFile(string filePath) {
-        File.Delete(filePath);
-    }
+    public static GameSave LoadGame() {
+        string filepath = Application.persistentDataPath + "/GameSave.txt";
+        GameSave gameSave;
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        FileStream fileStream;
 
-    public static string GetFilePath(string fileName) {
-        return Application.persistentDataPath + "/" + fileName + fileFormat;
-    }
+        try {
+            fileStream = File.Open(filepath, FileMode.Open);
+        } catch (Exception exception) {
+            Debug.Log($"Couldn't open file at {filepath}. Reason: {exception.Message}.");
+            return null;
+        }
 
-    public static string GetFileName(FileType fileType) {
-        switch (fileType) {
-            case FileType.Resources:
-                return resourcesFileName;
-            case FileType.Buildings:
-                return buildingsFileName;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(fileType), fileType, null);
+        try {
+            gameSave = (GameSave) binaryFormatter.Deserialize(fileStream);
+        } catch (Exception exception) {
+            Debug.LogError($"Failed to load data from {filepath}. Reason: {exception.Message}.");
+            throw;
+        }
+
+        fileStream.Dispose();
+
+        return gameSave;
+    }
+    
+    public static void SaveDefaultGame(GameSave gameSave) {
+        string filepath = Application.dataPath + defaultGameSaveFile;
+        if (File.Exists(filepath)) {
+            File.Delete(filepath);
+        }
+
+        string saveData = "";
+
+        try {
+            saveData = JsonUtility.ToJson(gameSave);
+        } catch (Exception exception) {
+            Debug.Log($"Couldn't serialize GameSave to Json. Reason {exception.Message}.");
+            throw;
+        }
+
+        try {
+            File.WriteAllText(filepath, saveData);
+        } catch (Exception exception) {
+            Debug.Log($"Couldn't save game to a file. Reason {exception.Message}.");
+            throw;
         }
     }
-}
 
-// TODO: Does not work with readonly properties
-[Serializable]
-public readonly struct GameSave {
-    [SerializeField] public readonly ResourceData resourceData;
-    [SerializeField] public readonly BuildingData buildingData;
+    public static GameSave LoadDefaultGame() {
+        string filepath = Application.dataPath + defaultGameSaveFile;
+        
+        if (!File.Exists(filepath)) {
+            File.Create(filepath);
+            return null;
+        }
 
-    public GameSave(ResourceData resourceData, BuildingData buildingData) {
-        this.resourceData = resourceData;
-        this.buildingData = buildingData;
+        string content = File.ReadAllText(filepath);
+        GameSave gameSave;
+
+        try {
+            gameSave = JsonUtility.FromJson<GameSave>(content);
+        } catch (Exception exception) {
+            Debug.Log($"Couldn't parse GameSave at {filepath}. Reason: {exception.Message}.");
+            throw;
+        }
+
+        return gameSave;
     }
 }
-
-public enum FileType { Resources, Buildings }

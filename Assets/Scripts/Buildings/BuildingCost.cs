@@ -1,13 +1,11 @@
-﻿using Resources;
-
-namespace Buildings {
+﻿namespace Buildings {
     [System.Serializable]
-    public readonly struct BuildingCost {
-        public readonly ResourceType resourceType;
-        public readonly float amount;
+    public struct BuildingCost { // TODO: Make readonly
+        public int resourceIndex;
+        public float amount;
 
-        public BuildingCost(ResourceType resourceType, float amount) {
-            this.resourceType = resourceType;
+        public BuildingCost(int resourceIndex, float amount) {
+            this.resourceIndex = resourceIndex;
             this.amount = amount;
         }
     }

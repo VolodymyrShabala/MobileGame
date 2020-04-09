@@ -6,13 +6,17 @@ public class Bootstrap : MonoBehaviour {
     [SerializeField] private ResourceVisual resourceVisual;
     [SerializeField] private BuildingVisual buildingVisual;
     private void Start() {
-        ResourceData resourceData = (ResourceData) DataLoader.LoadOrCreateData(FileType.Resources);
-        ResourceManager resourceManager = new ResourceManager(resourceVisual, resourceData);
-        resourceVisual.Init(resourceData);
+        if (!resourceVisual || !buildingVisual) {
+            Debug.LogError("One of the exposed fields are not assigned in the inspector. Aborting game start.");
+            return;
+        }
         
-        BuildingData buildingData = (BuildingData) DataLoader.LoadOrCreateData(FileType.Buildings);
+        GameSave gameSave =  DataLoader.LoadOrCreateGame();
+        ResourceManager resourceManager = new ResourceManager(resourceVisual, gameSave.resourceData);
+        resourceVisual.Init(gameSave.resourceData);
+        
         BuildingEffectManager buildingEffectManager = new BuildingEffectManager(resourceManager);
-        BuildingManager buildingManager = new BuildingManager(buildingEffectManager, buildingData);
-        buildingVisual.Init(buildingData, buildingManager);
+        BuildingManager buildingManager = new BuildingManager(buildingEffectManager, buildingVisual, gameSave.resourceData, gameSave.buildingData);
+        buildingVisual.Init(gameSave.buildingData, buildingManager);
     }
 }
