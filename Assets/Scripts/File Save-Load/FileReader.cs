@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Buildings;
+using Resources;
 using UnityEngine;
 
 public static class FileReader {
@@ -8,38 +10,72 @@ public static class FileReader {
     private static string resourcesFileName = "Resources";
     private static string buildingsFileName = "Buildings";
 
+    public static void SaveGame(GameSave gameSave) {
+        string filePath = Application.persistentDataPath + "/GameSave.txt";
+
+        if (File.Exists(filePath)) {
+            File.Delete(filePath);
+        }
+
+        string json = JsonUtility.ToJson(gameSave);
+        File.WriteAllText(filePath, json);
+    }
+
+    public static GameSave LoadGame() {
+        string filePath = Application.persistentDataPath + "/GameSave.txt";
+        GameSave gameSave;
+        string gameSaveString;
+
+        try {
+            gameSaveString = File.ReadAllText(filePath);
+        } catch (Exception exception) {
+            Debug.Log($"Couldn't read file at {filePath}. Reason: {exception.Message}.");
+            throw;
+        }
+
+        try {
+            gameSave = JsonUtility.FromJson<GameSave>(gameSaveString);
+        } catch (Exception exception) {
+            Debug.Log($"Couldn't parse GameSave at {filePath}. Reason: {exception.Message}.");
+            throw;
+        }
+        
+        return gameSave;
+    }
+
     public static object LoadData(FileType fileType) {
         string filePath = Application.persistentDataPath + "/" + GetFileName(fileType) + fileFormat;
 
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream;
         object data;
-        
+
         try {
             fileStream = File.Open(filePath, FileMode.Open);
         } catch (Exception exception) {
             Debug.Log($"Couldn't open file at {filePath}. Reason: {exception.Message}.");
             return null;
         }
-        
+
         try {
             data = binaryFormatter.Deserialize(fileStream);
         } catch (Exception exception) {
             Debug.LogError($"Failed to load data from {filePath}. Reason: {exception.Message}.");
             throw;
         }
-        
+
         fileStream.Dispose();
-        
+
         return data;
     }
 
     public static void SaveData(FileType fileType, object data) {
         string filePath = Application.persistentDataPath + "/" + GetFileName(fileType) + fileFormat;
+
         if (File.Exists(filePath)) {
             File.Delete(filePath);
         }
-        
+
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream = File.Create(filePath);
 
@@ -52,7 +88,7 @@ public static class FileReader {
             fileStream.Dispose();
         }
     }
-  
+
     public static void DeleteSaveFile(string filePath) {
         File.Delete(filePath);
     }
@@ -73,4 +109,16 @@ public static class FileReader {
     }
 }
 
-public enum FileType{ Resources, Buildings }
+// TODO: Does not work with readonly properties
+[Serializable]
+public readonly struct GameSave {
+    [SerializeField] public readonly ResourceData resourceData;
+    [SerializeField] public readonly BuildingData buildingData;
+
+    public GameSave(ResourceData resourceData, BuildingData buildingData) {
+        this.resourceData = resourceData;
+        this.buildingData = buildingData;
+    }
+}
+
+public enum FileType { Resources, Buildings }

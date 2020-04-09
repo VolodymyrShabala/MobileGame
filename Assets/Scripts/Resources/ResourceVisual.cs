@@ -8,14 +8,42 @@ namespace Resources {
         private ResourceData resourceData;
 
         public void Init(ResourceData resourceData) {
-            this.resourceData = resourceData;
-            int length = resourceData.GetNumberOfUnlockedResources();
-            resourceText = new TextMeshProUGUI[length];
-            for (int i = 0; i < length; i++) {
-                TextMeshProUGUI text = Instantiate(resourcePrefab, transform).GetComponent<TextMeshProUGUI>();
-                Resource resource = resourceData.GetResource((ResourceType) i);
+            if (!resourcePrefab) {
+                Debug.LogError($"No resourcePrefab is assigned in {name}. Aborting game startup.");
+                return;
+            }
 
-                text.text = $"{resource.resourceType.ToString()}: {resource.amount}/{resource.maxStorage}({resource.gainPerSecond})";
+            this.resourceData = resourceData;
+            CreateResourceText();
+        }
+
+        public void UpdateResources() {
+            int length = resourceData.GetNumberOfResources();
+
+            for (int i = 0; i < length; i++) {
+                if (!resourceData.IsUnlockedResource(i)) {
+                    continue;
+                }
+
+                resourceText[i].text = resourceData.GetResource(i).ToString();
+            }
+        }
+
+        public void UpdateResource(int index) {
+            resourceText[index].text = resourceData.GetResource(index).ToString();
+        }
+
+        private void CreateResourceText() {
+            int length = resourceData.GetNumberOfResources();
+            resourceText = new TextMeshProUGUI[length];
+
+            for (int i = 0; i < length; i++) {
+                if (!resourceData.IsUnlockedResource(i)) {
+                    continue;
+                }
+
+                TextMeshProUGUI text = Instantiate(resourcePrefab, transform).GetComponent<TextMeshProUGUI>();
+                text.text = resourceData.GetResource(i).ToString();
                 resourceText[i] = text;
             }
         }

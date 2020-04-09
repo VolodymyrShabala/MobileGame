@@ -1,22 +1,34 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
+// TODO: This class only spawns building buttons right now. Maybe change its name then?
 namespace Buildings {
     public class BuildingVisual : MonoBehaviour {
-        [SerializeField] private GameObject buildingPrefab;
-        private TextMeshProUGUI[] buildingsText; // TODO: Change to a button
+        [SerializeField] private BuildingButton buildingButtonPrefab;
+        private BuildingButton[] buildingButtons;
         private BuildingData buildingData;
-        public void Init(BuildingData buildingData) {
+        
+        public void Init(BuildingData buildingData, BuildingManager buildingManager) {
+            if (!buildingButtonPrefab) {
+                Debug.LogError($"No buildingButtonPrefab is assigned in {name}. Aborting game startup.");
+                return;
+            }
+            
             this.buildingData = buildingData;
 
-            int length = buildingData.GetBuildingsAmount();
-            buildingsText = new TextMeshProUGUI[length];
-            for (int i = 0; i < length; i++) {
-                TextMeshProUGUI text = Instantiate(buildingPrefab, transform).GetComponent<TextMeshProUGUI>();
-                Building building = buildingData.GetBuilding((BuildingType) i);
+            CreateBuildingButtons(buildingManager);
+        }
 
-                text.text = $"{building.buildingType.ToString()}: {building.amount}, {building.description}";
-                buildingsText[i] = text;
+        private void CreateBuildingButtons(BuildingManager buildingManager) {
+            int length = buildingData.GetBuildingsAmount();
+            buildingButtons = new BuildingButton[length];
+            
+            for (int i = 0; i < length; i++) {
+                if (!buildingData.IsUnlocked(i)) {
+                    continue;
+                }
+                
+                buildingButtons[i] = Instantiate(buildingButtonPrefab, transform);
+                buildingButtons[i].Init(buildingData.GetBuilding(i), buildingManager);
             }
         }
     }
