@@ -6,8 +6,7 @@ using UnityEngine;
 public static class FileReader {
     private static string defaultGameSaveFile = "/DefaultGameSave.txt";
     private static string gameSaveFile = "/GameSave.txt";
-
-
+    
     public static void SaveGame(GameSave gameSave) {
         string filepath = Application.persistentDataPath + gameSaveFile;
 
@@ -95,5 +94,17 @@ public static class FileReader {
         }
 
         return gameSave;
+    }
+
+    public static void DeleteSaveFile() {
+        string filepath = Application.persistentDataPath + gameSaveFile;
+
+        if (File.Exists(filepath)) {
+            File.Delete(filepath);
+        }
+    }
+
+    public static string GetSaveFilePath() {
+        return Application.persistentDataPath + "/GameSave.txt";
     }
 }

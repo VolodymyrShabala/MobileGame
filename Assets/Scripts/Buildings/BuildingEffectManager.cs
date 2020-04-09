@@ -40,7 +40,7 @@ namespace Buildings {
                     case BuildingEffectType.IncreasePopulation:
                         break;
                     case BuildingEffectType.IncreaseResourceStorage:
-                        resourceManager.IncreaseProduction(effects[i].resourceIndex, effects[i].amount);
+                        resourceManager.IncreaseStorage(effects[i].resourceIndex, effects[i].amount);
                         break;
                     case BuildingEffectType.BoostBuildingProduction: // TODO: Fill in later
                         break;

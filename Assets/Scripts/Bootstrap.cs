@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bootstrap : MonoBehaviour {
     [SerializeField] private ResourceVisual resourceVisual;
     [SerializeField] private BuildingVisual buildingVisual;
+    
     private void Start() {
         if (!resourceVisual || !buildingVisual) {
             Debug.LogError("One of the exposed fields are not assigned in the inspector. Aborting game start.");
