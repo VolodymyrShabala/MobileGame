@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// TODO: Check if initialized before using public methods
 public class BuildingButton : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI buildingNameAndAmount;
     [SerializeField] private TextMeshProUGUI buildingDescription;
@@ -29,11 +28,7 @@ public class BuildingButton : MonoBehaviour {
             return;
         }
         
-        if (initialized) {
-            Debug.LogError($"Trying to initialize already initialized class in {name}.");
-            return;
-        }
-
+        UnityEngine.Assertions.Assert.IsTrue(initialized);
         initialized = true;
 
         this.buildingManager = buildingManager;

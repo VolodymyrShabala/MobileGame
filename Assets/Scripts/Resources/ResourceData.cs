@@ -58,7 +58,7 @@
         }
 
         public bool IsInRange(int index) {
-            return index > 0 && index < Length;
+            return index >= 0 && index < Length;
         }
     }
 }
