@@ -1,9 +1,9 @@
-﻿using System.Globalization;
-using Buildings;
+﻿using Buildings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// TODO: Check if initialized before using public methods
 public class BuildingButton : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI buildingNameAndAmount;
     [SerializeField] private TextMeshProUGUI buildingDescription;
@@ -18,17 +18,28 @@ public class BuildingButton : MonoBehaviour {
 
     private BuildingManager buildingManager;
     private Building building;
+    private int buildingIndex;
 
-    public void Init(Building building, BuildingManager buildingManager) {
+    private bool initialized;
+
+    public void Init(Building building, int buildingIndex, BuildingManager buildingManager) {
         if (!buildingNameAndAmount || !buildingDescription || !buildingCostParent || !buildingCostParent ||
             !buildingEffectParent || buildButtons.Length == 0 || !defaultTextPrefab) {
             Debug.LogError($"One of the fields exposed to inspector has not been assigned in {name}. Aborting game startup.");
             return;
         }
+        
+        if (initialized) {
+            Debug.LogError($"Trying to initialize already initialized class in {name}.");
+            return;
+        }
+
+        initialized = true;
 
         this.buildingManager = buildingManager;
         this.building = building;
-
+        this.buildingIndex = buildingIndex;
+        
         UpdateText();
         UpdateDescription();
         UpdateCost();
@@ -43,13 +54,14 @@ public class BuildingButton : MonoBehaviour {
         body.SetActive(!body.activeInHierarchy);
     }
 
+    // TODO: Need to update cost too 
     private void Build() {
-        buildingManager.Build(building.buildingType, 1);
+        buildingManager.Build(buildingIndex, 1);
         UpdateText();
     }
 
     private void UpdateText() {
-        buildingNameAndAmount.text = $"{building.buildingType} ({building.amount})";
+        buildingNameAndAmount.text = $"{building.name} ({building.amount})";
     }
 
     private void UpdateDescription() {
@@ -58,14 +70,13 @@ public class BuildingButton : MonoBehaviour {
 
     private void UpdateCost() {
         int length = building.buildingCosts.Length;
-        CultureInfo currentCulture = CultureInfo.CurrentCulture;
 
         for (int i = 0; i < length; i++) {
             Instantiate(defaultTextPrefab, buildingCostParent).GetComponent<TextMeshProUGUI>().text =
-                    building.buildingCosts[i].resourceType.ToString();
+                    building.buildingCosts[i].resourceIndex.ToString(); // TODO: Need to get resource from index to name
 
             Instantiate(defaultTextPrefab, buildingCostParent).GetComponent<TextMeshProUGUI>().text =
-                    building.buildingCosts[i].amount.ToString(currentCulture);
+                    building.buildingCosts[i].amount.ToString();
         }
     }
 
@@ -74,7 +85,9 @@ public class BuildingButton : MonoBehaviour {
 
         for (int i = 0; i < length; i++) {
             Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
-                    building.buildingEffects[i].ToString();
+                    building.buildingEffects[i].resourceIndex.ToString();
+            Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
+                    building.buildingEffects[i].amount.ToString();
         }
     }
 

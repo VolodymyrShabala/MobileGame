@@ -1,7 +1,7 @@
 ﻿namespace Buildings {
     [System.Serializable]
-    public readonly struct BuildingData {
-        private readonly Building[] buildings;
+    public struct BuildingData {
+        [UnityEngine.SerializeField] private Building[] buildings; // TODO: Added serializeField for Json saving
 
         public BuildingData(Building[] buildings) {
             this.buildings = buildings;
@@ -20,23 +20,25 @@
         }
 
         public void Enable(int index) {
-            buildings[index].active = true;
+            buildings[index].enabled = true;
         }
 
         public void Disable(int index) {
-            buildings[index].active = false;
+            buildings[index].enabled = false;
         }
 
         public bool IsUnlocked(int index) {
-            return buildings[index].unlocked = true;
+            return buildings[index].unlocked;
         }
 
+        public bool IsEnabled(int index) {
+            return buildings[index].enabled;
+        }
+        
         public Building GetBuilding(int index) {
             return buildings[index];
         }
 
-        public int GetBuildingsAmount() {
-            return buildings.Length;
-        }
+        public int Length => buildings.Length;
     }
 }

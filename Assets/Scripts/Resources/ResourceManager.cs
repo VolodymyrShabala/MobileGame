@@ -3,7 +3,7 @@
 namespace Resources {
     public class ResourceManager {
         private readonly ResourceVisual resourceVisual;
-        private readonly ResourceData resourceData;
+        private ResourceData resourceData;
 
         public ResourceManager(ResourceVisual resourceVisual, ResourceData resourceData) {
             if (!resourceVisual) {
@@ -14,56 +14,51 @@ namespace Resources {
             this.resourceVisual = resourceVisual;
             this.resourceData = resourceData;
             
+            // TODO: Doesn't look good
             Tick.instance.UpdateFunc(delegate {
                 resourceData.Update();
                 resourceVisual.UpdateResources();
                  });
         }
 
-        public void AddResource(ResourceType resourceType, float amount) {
-            int resourceIndex = (int) resourceType;
+        public void AddResource(int resourceIndex, float amount) {
             resourceData.Add(resourceIndex, amount);
             resourceVisual.UpdateResource(resourceIndex);
         }
 
-        public void RemoveResource(ResourceType resourceType, float amount) {
-            resourceData.Remove((int) resourceType, amount);
+        public void RemoveResource(int resourceIndex, float amount) {
+            resourceData.Remove(resourceIndex, amount);
         }
 
-        public void IncreaseProduction(ResourceType resourceType, float amount) {
-            int resourceIndex = (int) resourceType;
+        public void IncreaseProduction(int resourceIndex, float amount) {
             resourceData.IncreaseProduction(resourceIndex, amount);
             resourceVisual.UpdateResource(resourceIndex);
         }
 
-        public void DecreaseProduction(ResourceType resourceType, float amount) {
-            int resourceIndex = (int) resourceType;
+        public void DecreaseProduction(int resourceIndex, float amount) {
             resourceData.DecreaseProduction(resourceIndex, amount);
             resourceVisual.UpdateResource(resourceIndex);
         }
 
-        public void UnlockResource(ResourceType resourceType) {
-            int resourceIndex = (int) resourceType;
-            resourceData.UnlockResource(resourceIndex);
+        public void UnlockResource(int resourceIndex) {
+            resourceData.Unlock(resourceIndex);
             resourceVisual.UpdateResource(resourceIndex);
         }
 
-        public bool IsUnlockedResource(ResourceType resourceType) {
-            return resourceData.IsUnlockedResource((int) resourceType);
+        public bool IsUnlockedResource(int resourceIndex) {
+            return resourceData.IsUnlocked(resourceIndex);
         }
 
-        public bool InEnoughResources(ResourceType resourceType, float amount) {
-            return resourceData.IsEnoughResource((int) resourceType, amount);
+        public bool InEnoughResources(int resourceIndex, float amount) {
+            return resourceData.IsEnoughResource(resourceIndex, amount);
         }
 
-        public void IncreaseStorage(ResourceType resourceType, float amount) {
-            int resourceIndex = (int) resourceType;
+        public void IncreaseStorage(int resourceIndex, float amount) {
             resourceData.IncreaseStorage(resourceIndex, amount);
             resourceVisual.UpdateResource(resourceIndex);
         }
 
-        public void DecreaseStorage(ResourceType resourceType, float amount) {
-            int resourceIndex = (int) resourceType;
+        public void DecreaseStorage(int resourceIndex, float amount) {
             resourceData.DecreaseStorage(resourceIndex, amount);
             resourceVisual.UpdateResource(resourceIndex);
         }
