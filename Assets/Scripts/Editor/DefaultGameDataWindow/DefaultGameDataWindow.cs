@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Buildings;
 using Resources;
 using UnityEditor;
@@ -176,6 +177,7 @@ namespace Editor.DefaultGameDataWindow {
 
             for (int i = 0; i < length; i++) {
                 BuildingCost buildingCost = building.buildingCosts[i];
+                
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(foldOutHorizontalOffset);
                 buildingCost.resourceIndex =

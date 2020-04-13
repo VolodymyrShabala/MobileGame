@@ -108,5 +108,13 @@ namespace Resources {
 
             return true;
         }
+
+        public Resource GetResource(int resourceIndex) {
+            if (!IsInRange(resourceIndex)) {
+                return default;
+            }
+            
+            return resourceData.GetResource(resourceIndex);
+        }
     }
 }

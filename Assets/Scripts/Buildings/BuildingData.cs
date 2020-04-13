@@ -1,7 +1,7 @@
 ﻿namespace Buildings {
     [System.Serializable]
     public struct BuildingData {
-        [UnityEngine.SerializeField] private Building[] buildings; // TODO: Added serializeField for Json saving
+        [UnityEngine.SerializeField] private Building[] buildings; // Added serializeField for Json saving
 
         public BuildingData(Building[] buildings) {
             this.buildings = buildings;

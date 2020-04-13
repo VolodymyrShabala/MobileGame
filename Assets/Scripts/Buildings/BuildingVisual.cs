@@ -1,15 +1,17 @@
-﻿using UnityEngine;
+﻿using Resources;
+using UnityEngine;
 
 // TODO: This class only spawns building buttons right now. Maybe change its name then?
 namespace Buildings {
     public class BuildingVisual : MonoBehaviour {
         [SerializeField] private BuildingButton buildingButtonPrefab;
         private BuildingButton[] buildingButtons;
-        private BuildingData buildingData;
+        private BuildingData buildingData; // TODO: Think about changing this to a buildingManager
         private BuildingManager buildingManager;
+        private ResourceManager resourceManager; // TODO: Think about if I should have it here? Used for buttons
         private bool initialized;
         
-        public void Init(BuildingData buildingData, BuildingManager buildingManager) {
+        public void Init(BuildingData buildingData, BuildingManager buildingManager, ResourceManager resourceManager) {
             if (!buildingButtonPrefab) {
                 Debug.LogError($"No buildingButtonPrefab is assigned in {name}. Aborting game startup.");
                 return;
@@ -24,6 +26,7 @@ namespace Buildings {
 
             this.buildingManager = buildingManager;
             this.buildingData = buildingData;
+            this.resourceManager = resourceManager;
 
             CreateBuildingButtons(buildingManager);
         }
@@ -38,7 +41,7 @@ namespace Buildings {
                 }
                 
                 buildingButtons[i] = Instantiate(buildingButtonPrefab, transform);
-                buildingButtons[i].Init(buildingData.GetBuilding(i), i, buildingManager);
+                buildingButtons[i].Init(buildingData.GetBuilding(i), i, buildingManager, resourceManager);
             }
         }
 
@@ -50,7 +53,7 @@ namespace Buildings {
             }
             
             buildingButtons[buildingIndex] = Instantiate(buildingButtonPrefab, transform);
-            buildingButtons[buildingIndex].Init(buildingData.GetBuilding(buildingIndex), buildingIndex, buildingManager);
+            buildingButtons[buildingIndex].Init(buildingData.GetBuilding(buildingIndex), buildingIndex, buildingManager, resourceManager);
         }
     }
 }
