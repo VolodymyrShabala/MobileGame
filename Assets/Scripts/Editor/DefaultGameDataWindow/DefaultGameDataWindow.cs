@@ -64,6 +64,14 @@ namespace Editor.DefaultGameDataWindow {
                 viewResources = false;
             }
 
+            if (GUILayout.Button("Save")) {
+                Save();
+            }
+
+            if (GUILayout.Button("Reload")) {
+                InitializeWindowContent();
+            }
+
             GUILayout.EndHorizontal();
 
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
@@ -77,8 +85,6 @@ namespace Editor.DefaultGameDataWindow {
             }
 
             EditorGUILayout.EndScrollView();
-            
-            Save();
         }
 
         private void ShowResourcesContent() {
@@ -255,14 +261,7 @@ namespace Editor.DefaultGameDataWindow {
             return resourceNames;
         }
 
-        // TODO: Fix saving issues. Currently saves all the time.
         private void Save() {
-            // TODO: if does not work
-            if (resources.Count == 0 && buildings.Count == 0 || resources == null || buildings == null) {
-                Debug.Log("Saving failed");
-                return;
-            }
-
             ResourceData resourceData = new ResourceData(resources.ToArray());
             BuildingData buildingData = new BuildingData(buildings.ToArray());
             GameSave gameSave = new GameSave(resourceData, buildingData);
