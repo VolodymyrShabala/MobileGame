@@ -1,4 +1,5 @@
 ﻿using Resources;
+using UnityEngine;
 
 namespace Buildings {
     public class BuildingManager {
@@ -18,18 +19,26 @@ namespace Buildings {
         }
 
         public void Build(int buildingIndex, int amount = 1) {
-            if (!IsEnoughResources(buildingIndex)) {
-                UnityEngine.Debug.Log("Not enough resources to build.");
+            if (!IsInRange(buildingIndex)) {
                 return;
             }
-
+            
+            if (!IsEnoughResources(buildingIndex)) {
+                Debug.Log($"Not enough resources to build {buildingIndex}.");
+                return;
+            }
+            
             buildingData.Build(buildingIndex, amount);
             effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
 
         public void Remove(int buildingIndex, int amount = 1) {
+            if (!IsInRange(buildingIndex)) {
+                return;
+            }
+            
             if (buildingData.GetBuilding(buildingIndex).amount < 1) {
-                UnityEngine.Debug.Log("There are no buildings to remove.");
+                Debug.Log($"There are no buildings to remove in {buildingIndex}.");
                 return;
             }
 
@@ -37,8 +46,12 @@ namespace Buildings {
         }
 
         public void Unlock(int buildingIndex) {
+            if (!IsInRange(buildingIndex)) {
+                return;
+            }
+            
             if (IsUnlocked(buildingIndex)) {
-                UnityEngine.Debug.Log("Something went wrong in BuildingManager. Trying to unlock unlocked building.");
+                Debug.Log($"Something went wrong in BuildingManager. Trying to unlock unlocked building at {buildingIndex}.");
                 return;
             }
 
@@ -47,8 +60,12 @@ namespace Buildings {
         }
 
         public void Enable(int buildingIndex) {
+            if (!IsInRange(buildingIndex)) {
+                return;
+            }
+            
             if (IsEnabled(buildingIndex)) {
-                UnityEngine.Debug.Log("Something went wrong in BuildingManager. Trying to enable enabled building.");
+                Debug.Log($"Something went wrong in BuildingManager. Trying to enable enabled building at {buildingIndex}.");
                 return;
             }
 
@@ -57,8 +74,12 @@ namespace Buildings {
         }
 
         public void Disable(int buildingIndex) {
+            if (!IsInRange(buildingIndex)) {
+                return;
+            }
+            
             if (!IsEnabled(buildingIndex)) {
-                UnityEngine.Debug.Log("Trying to disable disabled building.");
+                Debug.Log($"Trying to disable disabled building at {buildingIndex}.");
                 return;
             }
 
@@ -67,14 +88,26 @@ namespace Buildings {
         }
 
         public bool IsUnlocked(int buildingIndex) {
+            if (!IsInRange(buildingIndex)) {
+                return false;
+            }
+            
             return buildingData.IsUnlocked(buildingIndex);
         }
 
         public bool IsEnabled(int buildingIndex) {
+            if (!IsInRange(buildingIndex)) {
+                return false;
+            }
+            
             return buildingData.IsEnabled(buildingIndex);
         }
 
         public bool IsEnoughResources(int buildingIndex) {
+            if (!IsInRange(buildingIndex)) {
+                return false;
+            }
+            
             Building building = buildingData.GetBuilding(buildingIndex);
             int length = building.buildingCosts.Length;
 
@@ -83,6 +116,15 @@ namespace Buildings {
                                                    building.buildingCosts[i].amount)) {
                     return false;
                 }
+            }
+
+            return true;
+        }
+        
+        private bool IsInRange(int resourceIndex) {
+            if (!resourceData.IsInRange(resourceIndex)) {
+                Debug.Log($"Trying to access index out of range. Index: {resourceIndex}, Max index allowed: {resourceData.Length - 1}.");
+                return false;
             }
 
             return true;

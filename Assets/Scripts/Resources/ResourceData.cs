@@ -56,5 +56,9 @@
         public bool IsEnoughResource(int index, float amount) {
             return resources[index].storedAmount >= amount;
         }
+
+        public bool IsInRange(int index) {
+            return index > 0 && index < Length;
+        }
     }
 }
