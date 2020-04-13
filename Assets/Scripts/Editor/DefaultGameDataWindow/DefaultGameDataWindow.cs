@@ -8,6 +8,7 @@ namespace Editor.DefaultGameDataWindow {
     public class DefaultGameDataWindow : EditorWindow {
         private static readonly List<Resource> resources = new List<Resource>();
         private static readonly List<Building> buildings = new List<Building>();
+        private Vector2 scrollPos;
 
         private static readonly List<bool> foldOutBuildingCosts = new List<bool>();
         private static readonly List<bool> foldOutBuildingEffects = new List<bool>();
@@ -27,7 +28,7 @@ namespace Editor.DefaultGameDataWindow {
 
             resources.Clear();
             buildings.Clear();
-            
+
             foldOutBuildingCosts.Clear();
             foldOutBuildingEffects.Clear();
 
@@ -46,7 +47,7 @@ namespace Editor.DefaultGameDataWindow {
             foldOutBuildingCosts.AddRange(new bool[length]);
             foldOutBuildingEffects.AddRange(new bool[length]);
         }
-        
+
         private void OnGUI() {
             GUI.skin.button.stretchWidth = false;
             GUI.skin.textField.stretchWidth = true;
@@ -65,6 +66,8 @@ namespace Editor.DefaultGameDataWindow {
 
             GUILayout.EndHorizontal();
 
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
+            
             if (viewResources) {
                 ShowResourcesContent();
             }
@@ -73,6 +76,8 @@ namespace Editor.DefaultGameDataWindow {
                 ShowBuildingsContent();
             }
 
+            EditorGUILayout.EndScrollView();
+            
             Save();
         }
 
@@ -162,7 +167,7 @@ namespace Editor.DefaultGameDataWindow {
 
             for (int i = 0; i < length; i++) {
                 EditorGUILayout.Separator();
-                
+
                 BuildingCost buildingCost = building.buildingCosts[i];
                 GUILayout.BeginHorizontal();
 
@@ -176,9 +181,9 @@ namespace Editor.DefaultGameDataWindow {
                 GUILayout.EndHorizontal();
 
                 buildingCost.amount = EditorGUILayout.FloatField("Amount", buildingCost.amount);
-                
+
                 EditorGUILayout.Separator();
-                
+
                 building.buildingCosts[i] = buildingCost;
             }
 
@@ -213,12 +218,12 @@ namespace Editor.DefaultGameDataWindow {
                 }
 
                 GUILayout.EndHorizontal();
-                
+
                 buildingEffects.resourceIndex =
                         EditorGUILayout.Popup("Resource", buildingEffects.resourceIndex, GetResourceNames());
 
                 buildingEffects.amount = EditorGUILayout.FloatField("Amount", buildingEffects.amount);
-                
+
                 EditorGUILayout.Separator();
 
                 building.buildingEffects[i] = buildingEffects;
@@ -250,7 +255,14 @@ namespace Editor.DefaultGameDataWindow {
             return resourceNames;
         }
 
+        // TODO: Fix saving issues. Currently saves all the time.
         private void Save() {
+            // TODO: if does not work
+            if (resources.Count == 0 && buildings.Count == 0 || resources == null || buildings == null) {
+                Debug.Log("Saving failed");
+                return;
+            }
+
             ResourceData resourceData = new ResourceData(resources.ToArray());
             BuildingData buildingData = new BuildingData(buildings.ToArray());
             GameSave gameSave = new GameSave(resourceData, buildingData);
