@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Add removing from UpdateFunc
 public class Tick : MonoBehaviour {
 #region Singleton
     public static Tick instance;

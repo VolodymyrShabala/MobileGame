@@ -11,8 +11,7 @@ namespace Buildings {
         private readonly BuildingEffectManager effectManager;
 
         public BuildingManager(BuildingEffectManager effectManager, BuildingVisual buildingVisual,
-                               ResourceManager resourceManager, BuildingData buildingData
-                ) {
+                               ResourceManager resourceManager, BuildingData buildingData) {
             this.effectManager = effectManager;
             this.buildingData = buildingData;
             this.buildingVisual = buildingVisual;
@@ -112,6 +111,7 @@ namespace Buildings {
             Building building = buildingData.GetBuilding(buildingIndex);
             int length = building.buildingCosts.Length;
 
+            // TODO: Save building cost
             for (int i = 0; i < length; i++) {
                 if (!resourceManager.InEnoughResources(building.buildingCosts[i].resourceIndex,
                                                        building.buildingCosts[i].amount)) {

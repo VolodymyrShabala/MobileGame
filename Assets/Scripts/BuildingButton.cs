@@ -24,32 +24,29 @@ public class BuildingButton : MonoBehaviour {
     private bool initialized;
 
     public void Init(Building building, int buildingIndex, BuildingManager buildingManager, ResourceManager resourceManager) {
-        if (!buildingNameAndAmount || !buildingDescription || !buildingCostParent || !buildingCostParent ||
-            !buildingEffectParent || buildButtons.Length == 0 || !defaultTextPrefab) {
-            Debug.LogError($"One of the fields exposed to inspector has not been assigned in {name}. Aborting game startup.");
-            return;
-        }
-        
-        UnityEngine.Assertions.Assert.IsFalse(initialized);
+        AssertButtonReady();
+
         initialized = true;
 
         this.buildingManager = buildingManager;
         this.building = building;
         this.buildingIndex = buildingIndex;
         this.resourceManager = resourceManager;
-        
+
         UpdateText();
         UpdateDescription();
         UpdateCost();
         UpdateEffect();
         AssignBuildButtons();
-        
+
         collapsibleButton.onClick.AddListener(SwitchBodyVisibility);
         SwitchBodyVisibility();
     }
 
     private void SwitchBodyVisibility() {
         body.SetActive(!body.activeInHierarchy);
+        // GetComponentInParent<Canvas>().gameObject.SetActive(false);
+        // GetComponentInParent<Canvas>().gameObject.SetActive(true);
     }
 
     // TODO: Need to update cost too 
@@ -96,5 +93,17 @@ public class BuildingButton : MonoBehaviour {
         for (int i = 0; i < length; i++) {
             buildButtons[i].onClick.AddListener(Build);
         }
+    }
+
+    private void AssertButtonReady() {
+        UnityEngine.Assertions.Assert.IsNotNull(buildingNameAndAmount);
+        UnityEngine.Assertions.Assert.IsNotNull(buildingDescription);
+        UnityEngine.Assertions.Assert.IsNotNull(buildingCostParent);
+        UnityEngine.Assertions.Assert.IsNotNull(buildingEffectParent);
+        UnityEngine.Assertions.Assert.IsNotNull(defaultTextPrefab);
+        UnityEngine.Assertions.Assert.IsNotNull(collapsibleButton);
+        UnityEngine.Assertions.Assert.IsNotNull(body);
+        UnityEngine.Assertions.Assert.IsFalse(buildButtons.Length == 0);
+        UnityEngine.Assertions.Assert.IsFalse(initialized);
     }
 }
