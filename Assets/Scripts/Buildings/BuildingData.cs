@@ -1,7 +1,7 @@
 ﻿namespace Buildings {
     [System.Serializable]
     public struct BuildingData {
-        [UnityEngine.SerializeField] private Building[] buildings; // Added serializeField for Json saving
+        [UnityEngine.SerializeField] private Building[] buildings;
 
         public BuildingData(Building[] buildings) {
             this.buildings = buildings;
@@ -40,9 +40,5 @@
         }
 
         public int Length => buildings.Length;
-
-        public bool IsInRange(int index) {
-            return index >= 0 && index < Length;
-        }
     }
 }

@@ -12,16 +12,9 @@ namespace Buildings {
         private bool initialized;
         
         public void Init(BuildingData buildingData, BuildingManager buildingManager, ResourceManager resourceManager) {
-            if (!buildingButtonPrefab) {
-                Debug.LogError($"No buildingButtonPrefab is assigned in {name}. Aborting game startup.");
-                return;
-            }
+            UnityEngine.Assertions.Assert.IsNotNull(buildingButtonPrefab, $"No buildingButtonPrefab is assigned in {name}.");
+            UnityEngine.Assertions.Assert.IsFalse(initialized, $"Trying to initialize already initialized class in {name}.");
 
-            if (initialized) {
-                Debug.LogError($"Trying to initialize already initialized class in {name}.");
-                return;
-            }
-            
             initialized = true;
 
             this.buildingManager = buildingManager;
@@ -54,6 +47,10 @@ namespace Buildings {
             
             buildingButtons[buildingIndex] = Instantiate(buildingButtonPrefab, transform);
             buildingButtons[buildingIndex].Init(buildingData.GetBuilding(buildingIndex), buildingIndex, buildingManager, resourceManager);
+        }
+
+        public void UpdateButton(int buildingIndex) {
+            buildingButtons[buildingIndex].UpdateButton();
         }
     }
 }

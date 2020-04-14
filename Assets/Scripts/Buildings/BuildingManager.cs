@@ -2,10 +2,11 @@
 using UnityEngine;
 
 namespace Buildings {
+    // TODO: Do I need this class? It does the same things as BuildingData. Maybe combine those two classes together?
     public class BuildingManager {
         private BuildingData buildingData;
         private readonly BuildingVisual buildingVisual;
-        private ResourceManager resourceManager; // TODO: Do I really need it here?
+        private readonly ResourceManager resourceManager; // TODO: Do I really need it here?
 
         // TODO: Maybe move this to the Building struct. It can manage those things by itself
         private readonly BuildingEffectManager effectManager;
@@ -24,11 +25,12 @@ namespace Buildings {
             }
 
             if (!IsEnoughResources(buildingIndex)) {
-                Debug.Log($"Not enough resources to build {buildingIndex}.");
+                Debug.Log($"Not enough resources to build {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
             buildingData.Build(buildingIndex, amount);
+            buildingVisual.UpdateButton(buildingIndex);
             effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
 
@@ -38,11 +40,12 @@ namespace Buildings {
             }
 
             if (buildingData.GetBuilding(buildingIndex).amount < 1) {
-                Debug.Log($"There are no buildings to remove in {buildingIndex}.");
+                Debug.Log($"There are no buildings to remove in {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
             buildingData.Remove(buildingIndex, amount);
+            buildingVisual.UpdateButton(buildingIndex);
         }
 
         public void Unlock(int buildingIndex) {
@@ -51,7 +54,7 @@ namespace Buildings {
             }
 
             if (IsUnlocked(buildingIndex)) {
-                Debug.Log($"Something went wrong in BuildingManager. Trying to unlock unlocked building at {buildingIndex}.");
+                Debug.Log($"Something went wrong in BuildingManager. Trying to unlock unlocked building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
@@ -65,11 +68,12 @@ namespace Buildings {
             }
 
             if (IsEnabled(buildingIndex)) {
-                Debug.Log($"Something went wrong in BuildingManager. Trying to enable enabled building at {buildingIndex}.");
+                Debug.Log($"Something went wrong in BuildingManager. Trying to enable enabled building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
             buildingData.Enable(buildingIndex);
+            buildingVisual.UpdateButton(buildingIndex);
             effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
 
@@ -79,11 +83,12 @@ namespace Buildings {
             }
 
             if (!IsEnabled(buildingIndex)) {
-                Debug.Log($"Trying to disable disabled building at {buildingIndex}.");
+                Debug.Log($"Trying to disable disabled building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
             buildingData.Disable(buildingIndex);
+            buildingVisual.UpdateButton(buildingIndex);
             effectManager.RemoveEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
 
@@ -108,13 +113,13 @@ namespace Buildings {
                 return false;
             }
 
-            Building building = buildingData.GetBuilding(buildingIndex);
-            int length = building.buildingCosts.Length;
+            BuildingCost[] buildingCosts = buildingData.GetBuilding(buildingIndex).buildingCosts;
+            int length = buildingCosts.Length;
 
-            // TODO: Save building cost
             for (int i = 0; i < length; i++) {
-                if (!resourceManager.InEnoughResources(building.buildingCosts[i].resourceIndex,
-                                                       building.buildingCosts[i].amount)) {
+                BuildingCost buildingCost = buildingCosts[i];
+
+                if (!resourceManager.IsEnoughResources(buildingCost.resourceIndex, buildingCost.amount)) {
                     return false;
                 }
             }
@@ -123,12 +128,13 @@ namespace Buildings {
         }
 
         private bool IsInRange(int buildingIndex) {
-            if (!buildingData.IsInRange(buildingIndex)) {
-                Debug.Log($"Trying to access index out of range. Index: {buildingIndex}, Max index allowed: {buildingData.Length - 1}.");
-                return false;
+            if (buildingIndex >= 0 && buildingIndex < buildingData.Length) {
+                return true;
             }
 
-            return true;
+            Debug.Log($"Trying to access index out of range. Index: {buildingIndex}, Max index allowed: {buildingData.Length - 1}. {StackTraceUtility.ExtractStackTrace()}");
+
+            return false;
         }
     }
 }

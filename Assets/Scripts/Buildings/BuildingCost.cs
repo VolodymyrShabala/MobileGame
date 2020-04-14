@@ -1,6 +1,6 @@
 ﻿namespace Buildings {
     [System.Serializable]
-    public struct BuildingCost { // TODO: Make readonly
+    public struct BuildingCost {
         public int resourceIndex;
         public float amount;
 

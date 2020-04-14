@@ -2,6 +2,7 @@
 using Resources;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 public class BuildingButton : MonoBehaviour {
@@ -23,8 +24,9 @@ public class BuildingButton : MonoBehaviour {
 
     private bool initialized;
 
-    public void Init(Building building, int buildingIndex, BuildingManager buildingManager, ResourceManager resourceManager) {
-        AssertButtonReady();
+    public void Init(Building building, int buildingIndex, BuildingManager buildingManager,
+                     ResourceManager resourceManager) {
+        AssertButtonIsReady();
 
         initialized = true;
 
@@ -43,10 +45,13 @@ public class BuildingButton : MonoBehaviour {
         SwitchBodyVisibility();
     }
 
+    // TODO: Change name to Update when MonoBehaviour is removed
+    public void UpdateButton() {
+        
+    }
+
     private void SwitchBodyVisibility() {
         body.SetActive(!body.activeInHierarchy);
-        // GetComponentInParent<Canvas>().gameObject.SetActive(false);
-        // GetComponentInParent<Canvas>().gameObject.SetActive(true);
     }
 
     // TODO: Need to update cost too 
@@ -95,15 +100,15 @@ public class BuildingButton : MonoBehaviour {
         }
     }
 
-    private void AssertButtonReady() {
-        UnityEngine.Assertions.Assert.IsNotNull(buildingNameAndAmount);
-        UnityEngine.Assertions.Assert.IsNotNull(buildingDescription);
-        UnityEngine.Assertions.Assert.IsNotNull(buildingCostParent);
-        UnityEngine.Assertions.Assert.IsNotNull(buildingEffectParent);
-        UnityEngine.Assertions.Assert.IsNotNull(defaultTextPrefab);
-        UnityEngine.Assertions.Assert.IsNotNull(collapsibleButton);
-        UnityEngine.Assertions.Assert.IsNotNull(body);
-        UnityEngine.Assertions.Assert.IsFalse(buildButtons.Length == 0);
-        UnityEngine.Assertions.Assert.IsFalse(initialized);
+    private void AssertButtonIsReady() {
+        Assert.IsNotNull(buildingNameAndAmount, $"buildingNameAndAmount isn't assigned in {name}.");
+        Assert.IsNotNull(buildingDescription, $"buildingDescription isn't assigned in {name}.");
+        Assert.IsNotNull(buildingCostParent, $"buildingCostParent isn't assigned in {name}.");
+        Assert.IsNotNull(buildingEffectParent, $"buildingEffectParent isn't assigned in {name}.");
+        Assert.IsNotNull(defaultTextPrefab, $"defaultTextPrefab isn't assigned in {name}.");
+        Assert.IsNotNull(collapsibleButton, $"collapsibleButton isn't assigned in {name}.");
+        Assert.IsNotNull(body, $"body isn't assigned in {name}.");
+        Assert.IsFalse(buildButtons.Length == 0, $"buildButtons aren't assigned in {name}.");
+        Assert.IsFalse(initialized, $"Trying to initialize button when it is already initialized in {name}");
     }
 }

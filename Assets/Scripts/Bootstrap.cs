@@ -14,7 +14,7 @@ public class Bootstrap : MonoBehaviour {
         
         GameSave gameSave =  DataLoader.LoadOrCreateGame();
         ResourceManager resourceManager = new ResourceManager(resourceVisual, gameSave.resourceData);
-        resourceVisual.Init(gameSave.resourceData);
+        resourceVisual.Init(resourceManager);
         
         BuildingEffectManager buildingEffectManager = new BuildingEffectManager(resourceManager);
         BuildingManager buildingManager = new BuildingManager(buildingEffectManager, buildingVisual, resourceManager, gameSave.buildingData);

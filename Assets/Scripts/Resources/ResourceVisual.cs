@@ -2,25 +2,20 @@
 using UnityEngine;
 
 namespace Resources {
+    // TODO: Make class pure and remove initialized bool
     public class ResourceVisual : MonoBehaviour {
         [SerializeField] private GameObject resourcePrefab;
         private TextMeshProUGUI[] resourceText;
-        private ResourceData resourceData;
+        private ResourceManager resourceManager;
         private bool initialized;
 
-        public void Init(ResourceData resourceData) {
-            if (!resourcePrefab) {
-                Debug.LogError($"No resourcePrefab is assigned in {name}. Aborting game startup.");
-                return;
-            }
-
-            if (initialized) {
-                Debug.LogError($"Trying to initialize already initialized class in {name}.");
-                return;
-            }
-
+        // TODO: Move assertions to its own function?
+        public void Init(ResourceManager resourceManager) {
+            UnityEngine.Assertions.Assert.IsNotNull(resourcePrefab, $"No resourcePrefab is assigned in {name}.");
+            UnityEngine.Assertions.Assert.IsFalse(initialized, $"Trying to initialize already initialized class in {name}.");
             initialized = true;
-            this.resourceData = resourceData;
+            
+            this.resourceManager = resourceManager;
             CreateResourceText();
         }
 
@@ -30,14 +25,14 @@ namespace Resources {
                 return;
             }
 
-            int length = resourceData.Length;
+            int length = resourceManager.GetResourceAmount();
 
             for (int i = 0; i < length; i++) {
-                if (!resourceData.IsUnlocked(i)) {
+                if (!resourceManager.IsUnlockedResource(i)) {
                     continue;
                 }
 
-                resourceText[i].text = resourceData.GetResource(i).ToString();
+                resourceText[i].text = resourceManager.GetResource(i).ToString();
             }
         }
 
@@ -47,25 +42,25 @@ namespace Resources {
                 return;
             }
 
-            if (!resourceData.IsUnlocked(index)) {
+            if (!resourceManager.IsUnlockedResource(index)) {
                 Debug.Log($"Trying to update locked resource in {name}.");
                 return;
             }
 
-            resourceText[index].text = resourceData.GetResource(index).ToString();
+            resourceText[index].text = resourceManager.GetResource(index).ToString();
         }
 
         private void CreateResourceText() {
-            int length = resourceData.Length;
+            int length = resourceManager.GetResourceAmount();
             resourceText = new TextMeshProUGUI[length];
 
             for (int i = 0; i < length; i++) {
-                if (!resourceData.IsUnlocked(i)) {
+                if (!resourceManager.IsUnlockedResource(i)) {
                     continue;
                 }
 
                 TextMeshProUGUI text = Instantiate(resourcePrefab, transform).GetComponent<TextMeshProUGUI>();
-                text.text = resourceData.GetResource(i).ToString();
+                text.text = resourceManager.GetResource(i).ToString();
                 resourceText[i] = text;
             }
         }
