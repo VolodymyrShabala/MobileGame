@@ -2,16 +2,12 @@
 using UnityEngine;
 
 namespace Buildings {
-    // TODO: Do I need this class? It does the same things as BuildingData. Maybe combine those two classes together?
     public class BuildingManager {
-        private BuildingData buildingData;
-        private readonly BuildingVisual buildingVisual;
-        private readonly ResourceManager resourceManager; // TODO: Do I really need it here?
+        private readonly Building[] buildings;
+        // private readonly ResourceManager resourceManager;
 
-        public BuildingManager(BuildingVisual buildingVisual, ResourceManager resourceManager, BuildingData buildingData) {
-            this.buildingData = buildingData;
-            this.buildingVisual = buildingVisual;
-            this.resourceManager = resourceManager;
+        public BuildingManager(Building[] buildings) {
+            this.buildings = buildings;
         }
 
         public void Build(int buildingIndex, int amount = 1) {
@@ -24,8 +20,7 @@ namespace Buildings {
                 return;
             }
 
-            buildingData.Build(buildingIndex, amount);
-            buildingVisual.UpdateButton(buildingIndex);
+            buildings[buildingIndex].Build(amount);
         }
 
         public void Remove(int buildingIndex, int amount = 1) {
@@ -33,13 +28,12 @@ namespace Buildings {
                 return;
             }
 
-            if (buildingData.GetBuilding(buildingIndex).amount < 1) {
+            if (buildings[buildingIndex].GetAmount() < 1) {
                 Debug.Log($"There are no buildings to remove in {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
-            buildingData.Remove(buildingIndex, amount);
-            buildingVisual.UpdateButton(buildingIndex);
+            buildings[buildingIndex].Remove(amount);
         }
 
         public void Unlock(int buildingIndex) {
@@ -48,12 +42,12 @@ namespace Buildings {
             }
 
             if (IsUnlocked(buildingIndex)) {
-                Debug.Log($"Something went wrong in BuildingManager. Trying to unlock unlocked building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
+                Debug.Log($"Trying to unlock unlocked building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
-            buildingData.Unlock(buildingIndex);
-            buildingVisual.Unlock(buildingIndex);
+            buildings[buildingIndex].Unlock();
+
         }
 
         public void Enable(int buildingIndex) {
@@ -62,12 +56,11 @@ namespace Buildings {
             }
 
             if (IsEnabled(buildingIndex)) {
-                Debug.Log($"Something went wrong in BuildingManager. Trying to enable enabled building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
+                Debug.Log($"Trying to enable enabled building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
-            buildingData.Enable(buildingIndex);
-            buildingVisual.UpdateButton(buildingIndex);
+            buildings[buildingIndex].SetEnabled(true);
         }
 
         public void Disable(int buildingIndex) {
@@ -80,8 +73,7 @@ namespace Buildings {
                 return;
             }
 
-            buildingData.Disable(buildingIndex);
-            buildingVisual.UpdateButton(buildingIndex);
+            buildings[buildingIndex].SetEnabled(false);
         }
 
         public bool IsUnlocked(int buildingIndex) {
@@ -89,42 +81,47 @@ namespace Buildings {
                 return false;
             }
 
-            return buildingData.IsUnlocked(buildingIndex);
+            return buildings[buildingIndex].IsUnlocked();
         }
 
         public bool IsEnabled(int buildingIndex) {
-            if (!IsInRange(buildingIndex)) {
-                return false;
-            }
-
-            return buildingData.IsEnabled(buildingIndex);
+            return IsInRange(buildingIndex) && buildings[buildingIndex].IsEnabled();
         }
 
+        // TODO: Need to think about how to do this
         public bool IsEnoughResources(int buildingIndex) {
             if (!IsInRange(buildingIndex)) {
                 return false;
             }
 
-            BuildingCost[] buildingCosts = buildingData.GetBuilding(buildingIndex).buildingCosts;
-            int length = buildingCosts.Length;
+            // BuildingCost[] buildingCosts = buildings[buildingIndex].GetCosts();
+            // int length = buildingCosts.Length;
 
-            for (int i = 0; i < length; i++) {
-                BuildingCost buildingCost = buildingCosts[i];
+            // for (int i = 0; i < length; i++) {
+                // BuildingCost buildingCost = buildingCosts[i];
 
-                if (!resourceManager.IsEnoughResources(buildingCost.resourceIndex, buildingCost.amount)) {
-                    return false;
-                }
-            }
+                // if (!resourceManager.IsEnoughResources(buildingCost.resourceIndex, buildingCost.amount)) {
+                //     return false;
+                // }
+            // }
 
             return true;
         }
 
+        public int GetBuildingsAmount() {
+            return buildings.Length;
+        }
+
+        public Building GetBuilding(int buildingIndex) {
+            return !IsInRange(buildingIndex) ? null : buildings[buildingIndex];
+        }
+
         private bool IsInRange(int buildingIndex) {
-            if (buildingIndex >= 0 && buildingIndex < buildingData.Length) {
+            if (buildingIndex >= 0 && buildingIndex < GetBuildingsAmount()) {
                 return true;
             }
 
-            Debug.Log($"Trying to access index out of range. Index: {buildingIndex}, Max index allowed: {buildingData.Length - 1}. {StackTraceUtility.ExtractStackTrace()}");
+            Debug.Log($"Trying to access index out of range. Index: {buildingIndex}, Max index allowed: {GetBuildingsAmount() - 1}. {StackTraceUtility.ExtractStackTrace()}");
 
             return false;
         }
