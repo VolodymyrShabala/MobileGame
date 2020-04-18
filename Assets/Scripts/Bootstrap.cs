@@ -1,25 +1,28 @@
 ﻿using Buildings;
 using Resources;
+using TMPro;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour {
-    [SerializeField] private ResourceVisual resourceVisual;
-    [SerializeField] private BuildingVisual buildingVisual;
-    
+    // TODO: Move this to Resource Bootstrap
+    [SerializeField] private TextMeshProUGUI resourcePrefab;
+    [SerializeField] private Transform resourceParent;
+
+    // TODO: Move to Buildings Bootstrap
+    [SerializeField] private BuildingButton buildingButtonPrefab;
+    [SerializeField] private Transform buildingButtonParent;
+
     private void Start() {
-        if (!resourceVisual || !buildingVisual) {
-            Debug.LogError("One of the exposed fields are not assigned in the inspector. Aborting game start.");
-            return;
-        }
-        
-        GameSave gameSave =  DataLoader.LoadOrCreateGame();
-        ResourceManager resourceManager = new ResourceManager(resourceVisual, gameSave.resourceData);
-        resourceVisual.Init(resourceManager);
-        
+        // GameSave gameSave = DataLoader.LoadOrCreateGame();
+        GameSave gameSave = new GameSave(new ResourceManager(new[] {new Resource("Food", 0, 10, 0.1f, true)}),
+                                         new BuildingManager(new Building[0]));
+
+        ResourceVisual resourceVisual = new ResourceVisual(gameSave.GetResourceManager, resourcePrefab, resourceParent);
+
         // TODO: Remove having a copy. Best would be to have it static all the way
-        BuildingEffectManager buildingEffectManager = new BuildingEffectManager(resourceManager);
-        
-        BuildingManager buildingManager = new BuildingManager(buildingVisual, resourceManager, gameSave.buildingData);
-        buildingVisual.Init(gameSave.buildingData, buildingManager, resourceManager);
+        BuildingEffectManager buildingEffectManager = new BuildingEffectManager(gameSave.GetResourceManager);
+
+        BuildingVisual buildingVisual = new BuildingVisual(gameSave.GetBuildingManager, gameSave.GetResourceManager,
+                                                           buildingButtonPrefab, buildingButtonParent);
     }
 }
