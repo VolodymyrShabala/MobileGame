@@ -11,7 +11,7 @@ namespace Resources {
         }
         
         private void Update() {
-            int length = ResourceAmount();
+            int length = GetResourceAmount();
 
             for (int i = 0; i < length; i++) {
                 resources[i].Update();
@@ -90,17 +90,17 @@ namespace Resources {
             return !IsInRange(resourceIndex) ? null : resources[resourceIndex];
         }
 
-        public int ResourceAmount() {
+        public int GetResourceAmount() {
             return resources.Length;
         }
 
         // TODO: Remove Debug.Log when done
         private bool IsInRange(int resourceIndex) {
-            if (resourceIndex >= 0 && resourceIndex < ResourceAmount()) {
+            if (resourceIndex >= 0 && resourceIndex < GetResourceAmount()) {
                 return true;
             }
 
-            Debug.Log($"Trying to access index out of range. Index: {resourceIndex}, Max index allowed: {ResourceAmount() - 1}. {StackTraceUtility.ExtractStackTrace()}");
+            Debug.Log($"Trying to access index out of range. Index: {resourceIndex}, Max index allowed: {GetResourceAmount() - 1}. {StackTraceUtility.ExtractStackTrace()}");
 
             return false;
         }
