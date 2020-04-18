@@ -21,7 +21,7 @@ namespace Resources {
 
         public void UpdateResources() {
             if (!initialized) {
-                Debug.Log($"{name} has not been initialized.");
+                Debug.Log($"{name} has not been initialized. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
@@ -38,12 +38,12 @@ namespace Resources {
 
         public void UpdateResource(int index) {
             if (!initialized) {
-                Debug.Log($"{name} has not been initialized.");
+                Debug.Log($"{name} has not been initialized. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
             if (!resourceManager.IsUnlockedResource(index)) {
-                Debug.Log($"Trying to update locked resource in {name}.");
+                Debug.Log($"Trying to update locked resource in {name}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 

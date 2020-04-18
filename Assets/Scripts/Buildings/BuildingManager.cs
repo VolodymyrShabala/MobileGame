@@ -8,12 +8,7 @@ namespace Buildings {
         private readonly BuildingVisual buildingVisual;
         private readonly ResourceManager resourceManager; // TODO: Do I really need it here?
 
-        // TODO: Maybe move this to the Building struct. It can manage those things by itself
-        private readonly BuildingEffectManager effectManager;
-
-        public BuildingManager(BuildingEffectManager effectManager, BuildingVisual buildingVisual,
-                               ResourceManager resourceManager, BuildingData buildingData) {
-            this.effectManager = effectManager;
+        public BuildingManager(BuildingVisual buildingVisual, ResourceManager resourceManager, BuildingData buildingData) {
             this.buildingData = buildingData;
             this.buildingVisual = buildingVisual;
             this.resourceManager = resourceManager;
@@ -31,7 +26,6 @@ namespace Buildings {
 
             buildingData.Build(buildingIndex, amount);
             buildingVisual.UpdateButton(buildingIndex);
-            effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
 
         public void Remove(int buildingIndex, int amount = 1) {
@@ -74,7 +68,6 @@ namespace Buildings {
 
             buildingData.Enable(buildingIndex);
             buildingVisual.UpdateButton(buildingIndex);
-            effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
 
         public void Disable(int buildingIndex) {
@@ -89,7 +82,6 @@ namespace Buildings {
 
             buildingData.Disable(buildingIndex);
             buildingVisual.UpdateButton(buildingIndex);
-            effectManager.RemoveEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
         }
 
         public bool IsUnlocked(int buildingIndex) {

@@ -81,15 +81,15 @@ public class BuildingButton : MonoBehaviour {
     }
 
     private void UpdateEffect() {
-        int length = building.buildingEffects.Length;
-
-        for (int i = 0; i < length; i++) {
-            Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
-                    resourceManager.GetResource(building.buildingEffects[i].resourceIndex).name;
-
-            Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
-                    building.buildingEffects[i].amount.ToString();
-        }
+        // int length = building.buildingEffects.Length;
+        //
+        // for (int i = 0; i < length; i++) {
+        //     Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
+        //             resourceManager.GetResource(building.buildingEffects[i].resourceIndex).name;
+        //
+        //     Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
+        //             building.buildingEffects[i].amount.ToString();
+        // }
     }
 
     private void AssignBuildButtons() {

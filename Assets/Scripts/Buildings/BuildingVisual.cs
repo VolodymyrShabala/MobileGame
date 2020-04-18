@@ -41,7 +41,7 @@ namespace Buildings {
         // TODO: Need to check that this will put the button where I want it to be
         public void Unlock(int buildingIndex) {
             if (!initialized) {
-                Debug.Log($"{name} has not been initialized.");
+                Debug.Log($"{name} has not been initialized. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
             

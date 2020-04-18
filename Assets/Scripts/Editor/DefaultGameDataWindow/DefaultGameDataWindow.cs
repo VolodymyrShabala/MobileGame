@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Buildings;
 using Resources;
 using UnityEditor;
@@ -25,7 +24,7 @@ namespace Editor.DefaultGameDataWindow {
         }
 
         private static void InitializeWindowContent() {
-            GameSave gameSave = FileReader.LoadDefaultGame() ??
+            GameSave gameSave = FileReader.LoadGame() ??
                                 new GameSave(new ResourceData(new Resource[0]), new BuildingData(new Building[0]));
 
             resources.Clear();
@@ -65,7 +64,7 @@ namespace Editor.DefaultGameDataWindow {
                 viewBuildings = true;
                 viewResources = false;
             }
-            
+
             GUILayout.Space(20);
 
             if (GUILayout.Button("Save")) {
@@ -79,7 +78,7 @@ namespace Editor.DefaultGameDataWindow {
             GUILayout.EndHorizontal();
 
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
-            
+
             if (viewResources) {
                 ShowResourcesContent();
             }
@@ -129,7 +128,7 @@ namespace Editor.DefaultGameDataWindow {
 
             for (int i = 0; i < length; i++) {
                 GUILayout.BeginHorizontal();
-                
+
                 Building building = buildings[i];
                 building.name = EditorGUILayout.TextField("Name", building.name);
 
@@ -165,7 +164,8 @@ namespace Editor.DefaultGameDataWindow {
             }
 
             if (GUILayout.Button("Create new building")) {
-                buildings.Add(new Building("", "", new BuildingCost[0], new BuildingEffect[0]));
+                buildings.Add(new Building());
+
                 foldOutBuildingCosts.Add(false);
                 foldOutBuildingEffects.Add(false);
             }
@@ -177,9 +177,10 @@ namespace Editor.DefaultGameDataWindow {
 
             for (int i = 0; i < length; i++) {
                 BuildingCost buildingCost = building.buildingCosts[i];
-                
+
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(foldOutHorizontalOffset);
+
                 buildingCost.resourceIndex =
                         EditorGUILayout.Popup("Resource", buildingCost.resourceIndex, GetResourceNames());
 
@@ -188,7 +189,7 @@ namespace Editor.DefaultGameDataWindow {
                 }
 
                 GUILayout.EndHorizontal();
-                
+
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(foldOutHorizontalOffset);
                 buildingCost.amount = EditorGUILayout.FloatField("Amount", buildingCost.amount);
@@ -204,9 +205,10 @@ namespace Editor.DefaultGameDataWindow {
                 buildingCosts.RemoveAt(removeAt);
                 building.buildingCosts = buildingCosts.ToArray();
             }
-            
+
             GUILayout.BeginHorizontal();
             GUILayout.Space(foldOutHorizontalOffset);
+
             if (GUILayout.Button("Add building cost")) {
                 List<BuildingCost> buildingCosts = new List<BuildingCost>(building.buildingCosts) {
                         new BuildingCost(0, 0)
@@ -214,59 +216,64 @@ namespace Editor.DefaultGameDataWindow {
 
                 building.buildingCosts = buildingCosts.ToArray();
             }
+
             GUILayout.EndHorizontal();
         }
 
         private void ShowBuildingEffects(ref Building building) {
-            int length = building.buildingEffects.Length;
-            int removeAt = -1;
-
-            for (int i = 0; i < length; i++) {
-                BuildingEffect buildingEffects = building.buildingEffects[i];
-                GUILayout.BeginHorizontal();
-                GUILayout.Space(foldOutHorizontalOffset);
-
-                buildingEffects.effectType =
-                        (BuildingEffectType) EditorGUILayout.EnumPopup("Effect", buildingEffects.effectType);
-
-                if (GUILayout.Button("Remove")) {
-                    removeAt = i;
-                }
-
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                GUILayout.Space(foldOutHorizontalOffset);
-                buildingEffects.resourceIndex =
-                        EditorGUILayout.Popup("Resource", buildingEffects.resourceIndex, GetResourceNames());
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                GUILayout.Space(foldOutHorizontalOffset);
-                buildingEffects.amount = EditorGUILayout.FloatField("Amount", buildingEffects.amount);
-                GUILayout.EndHorizontal();
-
-                EditorGUILayout.Separator();
-
-                building.buildingEffects[i] = buildingEffects;
-            }
-
-            if (removeAt != -1) {
-                List<BuildingEffect> buildingEffects = new List<BuildingEffect>(building.buildingEffects);
-                buildingEffects.RemoveAt(removeAt);
-                building.buildingEffects = buildingEffects.ToArray();
-            }
-            
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(foldOutHorizontalOffset);
-            if (GUILayout.Button("Add building effect")) {
-                List<BuildingEffect> buildingEffects = new List<BuildingEffect>(building.buildingEffects) {
-                        new BuildingEffect(BuildingEffectType.None, 0, 0)
-                };
-
-                building.buildingEffects = buildingEffects.ToArray();
-            }
-            GUILayout.EndHorizontal();
+            // int length = building.buildingEffects.Length;
+            // int removeAt = -1;
+            //
+            // for (int i = 0; i < length; i++) {
+            //     BuildingEffect buildingEffects = building.buildingEffects[i];
+            //     GUILayout.BeginHorizontal();
+            //     GUILayout.Space(foldOutHorizontalOffset);
+            //
+            //     buildingEffects.effectType =
+            //             (BuildingEffectType) EditorGUILayout.EnumPopup("Effect", buildingEffects.effectType);
+            //
+            //     if (GUILayout.Button("Remove")) {
+            //         removeAt = i;
+            //     }
+            //
+            //     GUILayout.EndHorizontal();
+            //
+            //     GUILayout.BeginHorizontal();
+            //     GUILayout.Space(foldOutHorizontalOffset);
+            //
+            //     buildingEffects.resourceIndex =
+            //             EditorGUILayout.Popup("Resource", buildingEffects.resourceIndex, GetResourceNames());
+            //
+            //     GUILayout.EndHorizontal();
+            //
+            //     GUILayout.BeginHorizontal();
+            //     GUILayout.Space(foldOutHorizontalOffset);
+            //     buildingEffects.amount = EditorGUILayout.FloatField("Amount", buildingEffects.amount);
+            //     GUILayout.EndHorizontal();
+            //
+            //     EditorGUILayout.Separator();
+            //
+            //     building.buildingEffects[i] = buildingEffects;
+            // }
+            //
+            // if (removeAt != -1) {
+            //     List<BuildingEffect> buildingEffects = new List<BuildingEffect>(building.buildingEffects);
+            //     buildingEffects.RemoveAt(removeAt);
+            //     building.buildingEffects = buildingEffects.ToArray();
+            // }
+            //
+            // GUILayout.BeginHorizontal();
+            // GUILayout.Space(foldOutHorizontalOffset);
+            //
+            // if (GUILayout.Button("Add building effect")) {
+            //     List<BuildingEffect> buildingEffects = new List<BuildingEffect>(building.buildingEffects) {
+            //             new BuildingEffect(BuildingEffectType.None, 0, 0)
+            //     };
+            //
+            //     building.buildingEffects = buildingEffects.ToArray();
+            // }
+            //
+            // GUILayout.EndHorizontal();
         }
 
         private string[] GetResourceNames() {
@@ -284,7 +291,7 @@ namespace Editor.DefaultGameDataWindow {
             ResourceData resourceData = new ResourceData(resources.ToArray());
             BuildingData buildingData = new BuildingData(buildings.ToArray());
             GameSave gameSave = new GameSave(resourceData, buildingData);
-            FileReader.SaveDefaultGame(gameSave);
+            FileReader.SaveGame(gameSave);
         }
     }
 }

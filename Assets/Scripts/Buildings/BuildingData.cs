@@ -8,11 +8,11 @@
         }
 
         public void Build(int index, int amount) {
-            buildings[index].amount += amount;
+            buildings[index].Build(amount);
         }
 
         public void Remove(int index, int amount) {
-            buildings[index].amount -= amount;
+            buildings[index].Remove(amount);
         }
 
         public void Unlock(int index) {

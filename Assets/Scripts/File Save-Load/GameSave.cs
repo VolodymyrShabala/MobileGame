@@ -1,8 +1,7 @@
-﻿using System;
-using Buildings;
+﻿using Buildings;
 using Resources;
 
-[Serializable]
+[System.Serializable]
 public class GameSave {
     public ResourceData resourceData;
     public BuildingData buildingData;

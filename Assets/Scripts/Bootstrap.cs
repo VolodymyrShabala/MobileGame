@@ -16,8 +16,10 @@ public class Bootstrap : MonoBehaviour {
         ResourceManager resourceManager = new ResourceManager(resourceVisual, gameSave.resourceData);
         resourceVisual.Init(resourceManager);
         
+        // TODO: Remove having a copy. Best would be to have it static all the way
         BuildingEffectManager buildingEffectManager = new BuildingEffectManager(resourceManager);
-        BuildingManager buildingManager = new BuildingManager(buildingEffectManager, buildingVisual, resourceManager, gameSave.buildingData);
+        
+        BuildingManager buildingManager = new BuildingManager(buildingVisual, resourceManager, gameSave.buildingData);
         buildingVisual.Init(gameSave.buildingData, buildingManager, resourceManager);
     }
 }
