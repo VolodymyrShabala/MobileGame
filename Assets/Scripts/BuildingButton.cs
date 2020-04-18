@@ -61,22 +61,23 @@ public class BuildingButton : MonoBehaviour {
     }
 
     private void UpdateText() {
-        buildingNameAndAmount.text = $"{building.name} ({building.amount})";
+        buildingNameAndAmount.text = $"{building.GetName()} ({building.GetAmount()})";
     }
 
     private void UpdateDescription() {
-        buildingDescription.text = building.description;
+        buildingDescription.text = building.GetDescription();
     }
 
     private void UpdateCost() {
-        int length = building.buildingCosts.Length;
+        BuildingCost[] buildingCosts = building.GetCosts();
+        int length = buildingCosts.Length;
 
         for (int i = 0; i < length; i++) {
             Instantiate(defaultTextPrefab, buildingCostParent).GetComponent<TextMeshProUGUI>().text =
-                    resourceManager.GetResource(building.buildingCosts[i].resourceIndex).name;
+                    resourceManager.GetResource(buildingCosts[i].resourceIndex).GetName();
 
             Instantiate(defaultTextPrefab, buildingCostParent).GetComponent<TextMeshProUGUI>().text =
-                    building.buildingCosts[i].amount.ToString();
+                    buildingCosts[i].amount.ToString();
         }
     }
 
