@@ -1,56 +1,31 @@
 ﻿using Resources;
 using UnityEngine;
 
-// TODO: This class only spawns building buttons right now. Maybe change its name then?
 namespace Buildings {
-    public class BuildingVisual : MonoBehaviour {
-        [SerializeField] private BuildingButton buildingButtonPrefab;
+    public class BuildingVisual  {
         private BuildingButton[] buildingButtons;
-        private BuildingData buildingData; // TODO: Think about changing this to a buildingManager
-        private BuildingManager buildingManager;
-        private ResourceManager resourceManager; // TODO: Think about if I should have it here? Used for buttons
-        private bool initialized;
         
-        public void Init(BuildingData buildingData, BuildingManager buildingManager, ResourceManager resourceManager) {
-            UnityEngine.Assertions.Assert.IsNotNull(buildingButtonPrefab, $"No buildingButtonPrefab is assigned in {name}.");
-            UnityEngine.Assertions.Assert.IsFalse(initialized, $"Trying to initialize already initialized class in {name}.");
-
-            initialized = true;
-
-            this.buildingManager = buildingManager;
-            this.buildingData = buildingData;
-            this.resourceManager = resourceManager;
-
-            CreateBuildingButtons(buildingManager);
+        public BuildingVisual(BuildingManager buildingManager, ResourceManager resourceManager, BuildingButton buildingButtonPrefab, Transform parent) {
+            UnityEngine.Assertions.Assert.IsNotNull(buildingManager, $"No buildingManager is assigned in BuildingVisual.");
+            UnityEngine.Assertions.Assert.IsNotNull(resourceManager, $"No resourceManager is assigned in BuildingVisual.");
+            UnityEngine.Assertions.Assert.IsNotNull(buildingButtonPrefab, $"No buildingButtonPrefab is assigned in BuildingVisual.");
+            UnityEngine.Assertions.Assert.IsNotNull(parent, $"No parent is assigned in BuildingVisual.");
+            
+            CreateBuildingButtons(buildingManager, resourceManager, buildingButtonPrefab, parent);
         }
 
-        private void CreateBuildingButtons(BuildingManager buildingManager) {
-            int length = buildingData.Length;
+        private void CreateBuildingButtons(BuildingManager buildingManager, ResourceManager resourceManager, BuildingButton buildingButtonPrefab, Transform parent) {
+            int length = buildingManager.GetBuildingsAmount();
             buildingButtons = new BuildingButton[length];
-            
+
             for (int i = 0; i < length; i++) {
-                if (!buildingData.IsUnlocked(i)) {
+                if (!buildingManager.IsUnlocked(i)) {
                     continue;
                 }
                 
-                buildingButtons[i] = Instantiate(buildingButtonPrefab, transform);
-                buildingButtons[i].Init(buildingData.GetBuilding(i), i, buildingManager, resourceManager);
+                buildingButtons[i] = Object.Instantiate(buildingButtonPrefab, parent);
+                buildingButtons[i].Init(buildingManager.GetBuilding(i), i, buildingManager, resourceManager);
             }
-        }
-
-        // TODO: Need to check that this will put the button where I want it to be
-        public void Unlock(int buildingIndex) {
-            if (!initialized) {
-                Debug.Log($"{name} has not been initialized. {StackTraceUtility.ExtractStackTrace()}");
-                return;
-            }
-            
-            buildingButtons[buildingIndex] = Instantiate(buildingButtonPrefab, transform);
-            buildingButtons[buildingIndex].Init(buildingData.GetBuilding(buildingIndex), buildingIndex, buildingManager, resourceManager);
-        }
-
-        public void UpdateButton(int buildingIndex) {
-            buildingButtons[buildingIndex].UpdateButton();
         }
     }
 }
