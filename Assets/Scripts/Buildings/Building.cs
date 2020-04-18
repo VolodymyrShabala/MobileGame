@@ -1,22 +1,20 @@
-﻿using Buildings.BuildingEffects;
-
-namespace Buildings {
+﻿namespace Buildings {
     [System.Serializable]
     public class Building {
-        public string name;
-        public string description;
-        public BuildingCost[] buildingCosts;
-        public BuildingEffect[] buildingEffects;
-        public int amount;
-        public bool enabled;
-        public bool unlocked;
+        private string name;
+        private string description;
+        private BuildingCost[] costs;
+        private BuildingEffect[] effects;
+        private int amount;
+        private bool enabled;
+        private bool unlocked;
 
-        public Building(string name = "", string description = "", BuildingCost[] buildingCosts = null, BuildingEffect[] buildingEffects = null,
+        public Building(string name, string description, BuildingCost[] costs, BuildingEffect[] effects,
                         int amount = 0, bool enabled = true, bool unlocked = false) {
             this.name = name;
             this.description = description;
-            this.buildingCosts = buildingCosts;
-            this.buildingEffects = buildingEffects;
+            this.costs = costs;
+            this.effects = effects;
             this.amount = amount;
             this.enabled = enabled;
             this.unlocked = unlocked;
@@ -32,16 +30,48 @@ namespace Buildings {
             RemoveBuildingEffects();
         }
 
+        public void Unlock() {
+            unlocked = true;
+        }
+
+        public void SetEnabled(bool enabled) {
+            this.enabled = enabled;
+        }
+
+        public string GetName() {
+            return name;
+        }
+
+        public string GetDescription() {
+            return description;
+        }
+
+        public BuildingCost[] GetCosts() {
+            return costs;
+        }
+
+        public BuildingEffect[] GetEffects() {
+            return effects;
+        }
+
+        public int GetAmount() {
+            return amount;
+        }
+
+        public bool IsEnabled() {
+            return enabled;
+        }
+
+        public bool IsUnlocked() {
+            return unlocked;
+        }
+
         private void ApplyBuildingEffects() {
-            BuildingEffectManager.Instance.ApplyEffects(buildingEffects);
+            BuildingEffectManager.Instance.ApplyEffects(effects);
         }
 
         private void RemoveBuildingEffects() {
-            BuildingEffectManager.Instance.RemoveEffects(buildingEffects);
+            BuildingEffectManager.Instance.RemoveEffects(effects);
         }
-    }
-    public enum BuildingEffectType {
-        None, UnlockResource, ProduceResource, ConsumeResource, IncreaseResourceProduction, DecreaseResourceProduction,
-        DecreaseResourceConsumption, IncreasePopulation, IncreaseResourceStorage, BoostBuildingProduction
     }
 }
