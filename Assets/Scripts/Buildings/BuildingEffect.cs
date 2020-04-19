@@ -1,8 +1,10 @@
 ﻿using Resources;
 
 namespace Buildings {
+    [System.Serializable]
     public class BuildingEffect {
-        protected int resourceIndex;
+        protected int buildingIndex = -1;
+        protected int resourceIndex = -1;
         protected float amount;
 
         public virtual void Apply(ResourceManager resourceManager) {
@@ -11,8 +13,16 @@ namespace Buildings {
         public virtual void Remove(ResourceManager resourceManager) {
         }
 
-        public void ShowBuildingEffectsWindow() {
-            
+        public int GetBuildingIndex() {
+            return buildingIndex;
+        }
+
+        public int GetResourceIndex() {
+            return resourceIndex;
+        }
+        
+        public float GetAmount() {
+            return amount;
         }
     }
 }

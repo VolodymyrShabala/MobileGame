@@ -24,7 +24,7 @@ namespace Buildings {
                 }
                 
                 buildingButtons[i] = Object.Instantiate(buildingButtonPrefab, parent);
-                buildingButtons[i].Init(buildingManager.GetBuilding(i), i, buildingManager, resourceManager);
+                buildingButtons[i].Init(buildingManager.GetBuilding(i), resourceManager);
             }
         }
     }

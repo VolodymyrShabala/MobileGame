@@ -8,6 +8,10 @@
         private int amount;
         private bool enabled;
         private bool unlocked;
+        
+        public System.Action onBuild;
+        public System.Action onCostUpdated;
+        public System.Action onEffectsUpdated;
 
         public Building(string name, string description, BuildingCost[] costs, BuildingEffect[] effects,
                         int amount = 0, bool enabled = true, bool unlocked = false) {
@@ -23,19 +27,33 @@
         public void Build(int amount = 1) {
             this.amount += amount;
             ApplyBuildingEffects();
+            onBuild?.Invoke();
         }
 
         public void Remove(int amount = 1) {
             this.amount -= amount;
             RemoveBuildingEffects();
+            onBuild?.Invoke();
         }
 
         public void Unlock() {
             unlocked = true;
+            onBuild?.Invoke();
         }
 
         public void SetEnabled(bool enabled) {
             this.enabled = enabled;
+            onBuild?.Invoke();
+        }
+
+        public void SetCost(BuildingCost[] costs) {
+            this.costs = costs;
+            onCostUpdated?.Invoke();
+        }
+
+        public void SetEffects(BuildingEffect[] effects) {
+            this.effects = effects;
+            onEffectsUpdated?.Invoke();
         }
 
         public string GetName() {

@@ -1,4 +1,5 @@
-﻿using Buildings;
+﻿using System.Collections.Generic;
+using Buildings;
 using Resources;
 using TMPro;
 using UnityEngine;
@@ -17,23 +18,22 @@ public class BuildingButton : MonoBehaviour {
     [SerializeField] private Button collapsibleButton;
     [SerializeField] private GameObject body;
 
-    private BuildingManager buildingManager;
     private Building building;
-    private int buildingIndex;
     private ResourceManager resourceManager;
+    private List<TextMeshProUGUI> buildingCostsVisual = new List<TextMeshProUGUI>();
+    private List<TextMeshProUGUI> buildingEffectsVisual = new List<TextMeshProUGUI>();
 
     private bool initialized;
 
-    public void Init(Building building, int buildingIndex, BuildingManager buildingManager,
-                     ResourceManager resourceManager) {
+    public void Init(Building building, ResourceManager resourceManager) {
         AssertButtonIsReady();
 
         initialized = true;
+        
 
-        this.buildingManager = buildingManager;
         this.building = building;
-        this.buildingIndex = buildingIndex;
         this.resourceManager = resourceManager;
+        SubscribeToDelegates();
 
         UpdateText();
         UpdateDescription();
@@ -45,9 +45,8 @@ public class BuildingButton : MonoBehaviour {
         SwitchBodyVisibility();
     }
 
-    // TODO: Change name to Update when MonoBehaviour is removed
-    public void UpdateButton() {
-        
+    private void UpdateButton() {
+        UpdateText();
     }
 
     private void SwitchBodyVisibility() {
@@ -56,7 +55,7 @@ public class BuildingButton : MonoBehaviour {
 
     // TODO: Need to update cost too 
     private void Build() {
-        buildingManager.Build(buildingIndex, 1);
+        building.Build();
         UpdateText();
     }
 
@@ -68,29 +67,36 @@ public class BuildingButton : MonoBehaviour {
         buildingDescription.text = building.GetDescription();
     }
 
+    // Separate to a different class
     private void UpdateCost() {
         BuildingCost[] buildingCosts = building.GetCosts();
         int length = buildingCosts.Length;
 
         for (int i = 0; i < length; i++) {
-            Instantiate(defaultTextPrefab, buildingCostParent).GetComponent<TextMeshProUGUI>().text =
-                    resourceManager.GetResource(buildingCosts[i].resourceIndex).GetName();
+            TextMeshProUGUI resourceName = Instantiate(defaultTextPrefab, buildingCostParent);
+            resourceName.text = resourceManager.GetResource(buildingCosts[i].resourceIndex).GetName();
+            buildingCostsVisual.Add(resourceName);
 
-            Instantiate(defaultTextPrefab, buildingCostParent).GetComponent<TextMeshProUGUI>().text =
-                    buildingCosts[i].amount.ToString();
+            TextMeshProUGUI resourceCost = Instantiate(defaultTextPrefab, buildingCostParent);
+            resourceCost.text = buildingCosts[i].amount.ToString();
+            buildingCostsVisual.Add(resourceCost);
         }
     }
 
     private void UpdateEffect() {
-        // int length = building.buildingEffects.Length;
-        //
-        // for (int i = 0; i < length; i++) {
-        //     Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
-        //             resourceManager.GetResource(building.buildingEffects[i].resourceIndex).name;
-        //
-        //     Instantiate(defaultTextPrefab, buildingEffectParent).GetComponent<TextMeshProUGUI>().text =
-        //             building.buildingEffects[i].amount.ToString();
-        // }
+        BuildingEffect[] buildingEffects = building.GetEffects();
+        int length = buildingEffects.Length;
+        
+        for (int i = 0; i < length; i++) {
+            TextMeshProUGUI effectName = Instantiate(defaultTextPrefab, buildingEffectParent);
+            effectName.text = resourceManager.GetResource(buildingEffects[i].GetResourceIndex()).GetName();
+            buildingEffectsVisual.Add(effectName);
+
+            TextMeshProUGUI effectAmount = Instantiate(defaultTextPrefab, buildingEffectParent);
+            effectAmount.text = buildingEffects[i].GetAmount().ToString();
+            
+            buildingEffectsVisual.Add(effectAmount);
+        }
     }
 
     private void AssignBuildButtons() {
@@ -111,5 +117,22 @@ public class BuildingButton : MonoBehaviour {
         Assert.IsNotNull(body, $"body isn't assigned in {name}.");
         Assert.IsFalse(buildButtons.Length == 0, $"buildButtons aren't assigned in {name}.");
         Assert.IsFalse(initialized, $"Trying to initialize button when it is already initialized in {name}");
+    }
+
+    private void SubscribeToDelegates() {
+        building.onBuild += UpdateButton;
+        building.onCostUpdated += UpdateCost;
+        building.onEffectsUpdated += UpdateEffect;
+    }
+
+    private void UnsubscribeFromDelegates() {
+        building.onBuild -= UpdateButton;
+        building.onCostUpdated -= UpdateCost;
+        building.onEffectsUpdated -= UpdateEffect;
+    }
+
+    // TODO: Need to think about how this is going to work. Do I need OnEnable too?
+    private void OnDisable() {
+        UnsubscribeFromDelegates();
     }
 }
