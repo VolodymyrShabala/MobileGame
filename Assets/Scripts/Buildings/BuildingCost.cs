@@ -1,5 +1,7 @@
-﻿namespace Buildings {
-    [System.Serializable]
+﻿using System;
+
+namespace Buildings {
+    [Serializable]
     public struct BuildingCost {
         public int resourceIndex;
         public float amount;

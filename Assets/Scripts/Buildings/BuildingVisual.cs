@@ -1,30 +1,32 @@
-﻿using Resources;
+﻿using Buildings.BuildingButton;
+using Resources;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Buildings {
-    public class BuildingVisual  {
-        private BuildingButton[] buildingButtons;
-        
-        public BuildingVisual(BuildingManager buildingManager, ResourceManager resourceManager, BuildingButton buildingButtonPrefab, Transform parent) {
-            UnityEngine.Assertions.Assert.IsNotNull(buildingManager, $"No buildingManager is assigned in BuildingVisual.");
-            UnityEngine.Assertions.Assert.IsNotNull(resourceManager, $"No resourceManager is assigned in BuildingVisual.");
-            UnityEngine.Assertions.Assert.IsNotNull(buildingButtonPrefab, $"No buildingButtonPrefab is assigned in BuildingVisual.");
-            UnityEngine.Assertions.Assert.IsNotNull(parent, $"No parent is assigned in BuildingVisual.");
-            
+    public class BuildingVisual {
+        public BuildingVisual(BuildingManager buildingManager, ResourceManager resourceManager,
+                              BuildingButtonHolder buildingButtonPrefab, Transform parent) {
+            Assert.IsNotNull(buildingManager, "No buildingManager is assigned in BuildingVisual.");
+            Assert.IsNotNull(resourceManager, "No resourceManager is assigned in BuildingVisual.");
+            Assert.IsNotNull(buildingButtonPrefab, "No buildingButtonPrefab is assigned in BuildingVisual.");
+            Assert.IsNotNull(parent, "No parent is assigned in BuildingVisual.");
+
             CreateBuildingButtons(buildingManager, resourceManager, buildingButtonPrefab, parent);
         }
 
-        private void CreateBuildingButtons(BuildingManager buildingManager, ResourceManager resourceManager, BuildingButton buildingButtonPrefab, Transform parent) {
+        private void CreateBuildingButtons(BuildingManager buildingManager, ResourceManager resourceManager,
+                                           BuildingButtonHolder buildingButtonPrefab, Transform parent) {
             int length = buildingManager.GetBuildingsAmount();
-            buildingButtons = new BuildingButton[length];
 
             for (int i = 0; i < length; i++) {
                 if (!buildingManager.IsUnlocked(i)) {
                     continue;
                 }
-                
-                buildingButtons[i] = Object.Instantiate(buildingButtonPrefab, parent);
-                buildingButtons[i].Init(buildingManager.GetBuilding(i), resourceManager);
+
+                BuildingButton.BuildingButton buildingButton =
+                        new BuildingButton.BuildingButton(buildingManager.GetBuilding(i), resourceManager, buildingButtonPrefab,
+                                                          parent);
             }
         }
     }

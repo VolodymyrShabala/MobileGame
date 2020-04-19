@@ -1,20 +1,22 @@
-﻿namespace Buildings {
-    [System.Serializable]
-    public class Building {
-        private string name;
-        private string description;
-        private BuildingCost[] costs;
-        private BuildingEffect[] effects;
-        private int amount;
-        private bool enabled;
-        private bool unlocked;
-        
-        public System.Action onBuild;
-        public System.Action onCostUpdated;
-        public System.Action onEffectsUpdated;
+﻿using System;
 
-        public Building(string name, string description, BuildingCost[] costs, BuildingEffect[] effects,
-                        int amount = 0, bool enabled = true, bool unlocked = false) {
+namespace Buildings {
+    [Serializable]
+    public class Building {
+        private int amount;
+        private BuildingCost[] costs;
+        private string description;
+        private BuildingEffect[] effects;
+        private bool enabled;
+        private string name;
+
+        public Action onBuild;
+        public Action onCostUpdated;
+        public Action onEffectsUpdated;
+        private bool unlocked;
+
+        public Building(string name, string description, BuildingCost[] costs, BuildingEffect[] effects, int amount = 0,
+                        bool enabled = true, bool unlocked = false) {
             this.name = name;
             this.description = description;
             this.costs = costs;

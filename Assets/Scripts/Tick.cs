@@ -4,23 +4,10 @@ using UnityEngine;
 
 // TODO: Add removing from UpdateFunc
 public class Tick : MonoBehaviour {
-#region Singleton
-    public static Tick instance;
-
-    private void Awake() {
-        if (instance != null && instance != this) {
-            Destroy(gameObject);
-        }
-
-        instance = this;
-    }
-#endregion
-
-    private List<object> objectsToUpdate = new List<object>();
     [SerializeField] private float fps = 0.2f;
-    private float timer = 0;
     private Action onUpdate;
-    
+    private float timer;
+
     private void Update() {
         timer += Time.deltaTime;
 
@@ -37,4 +24,16 @@ public class Tick : MonoBehaviour {
     public void UpdateFunc(Action function) {
         onUpdate += function;
     }
+
+#region Singleton
+    public static Tick instance;
+
+    private void Awake() {
+        if (instance != null && instance != this) {
+            Destroy(gameObject);
+        }
+
+        instance = this;
+    }
+#endregion
 }

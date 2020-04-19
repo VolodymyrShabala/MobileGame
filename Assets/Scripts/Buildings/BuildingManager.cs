@@ -1,5 +1,4 @@
-﻿using Resources;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Buildings {
     public class BuildingManager {
@@ -47,7 +46,6 @@ namespace Buildings {
             }
 
             buildings[buildingIndex].Unlock();
-
         }
 
         public void Enable(int buildingIndex) {
@@ -77,19 +75,18 @@ namespace Buildings {
         }
 
         public bool IsUnlocked(int buildingIndex) {
-            if (!IsInRange(buildingIndex)) {
+            if (!IsInRange(buildingIndex))
                 return false;
-            }
 
             return buildings[buildingIndex].IsUnlocked();
         }
 
-        public bool IsEnabled(int buildingIndex) {
+        private bool IsEnabled(int buildingIndex) {
             return IsInRange(buildingIndex) && buildings[buildingIndex].IsEnabled();
         }
 
         // TODO: Need to think about how to do this
-        public bool IsEnoughResources(int buildingIndex) {
+        private bool IsEnoughResources(int buildingIndex) {
             if (!IsInRange(buildingIndex)) {
                 return false;
             }
@@ -98,11 +95,11 @@ namespace Buildings {
             // int length = buildingCosts.Length;
 
             // for (int i = 0; i < length; i++) {
-                // BuildingCost buildingCost = buildingCosts[i];
+            // BuildingCost buildingCost = buildingCosts[i];
 
-                // if (!resourceManager.IsEnoughResources(buildingCost.resourceIndex, buildingCost.amount)) {
-                //     return false;
-                // }
+            // if (!resourceManager.IsEnoughResources(buildingCost.resourceIndex, buildingCost.amount)) {
+            //     return false;
+            // }
             // }
 
             return true;

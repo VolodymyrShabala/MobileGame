@@ -1,11 +1,12 @@
-﻿using Resources;
+﻿using System;
+using Resources;
 
 namespace Buildings {
-    [System.Serializable]
-    public class BuildingEffect {
+    [Serializable]
+    public abstract class BuildingEffect {
+        protected float amount;
         protected int buildingIndex = -1;
         protected int resourceIndex = -1;
-        protected float amount;
 
         public virtual void Apply(ResourceManager resourceManager) {
         }
@@ -20,7 +21,7 @@ namespace Buildings {
         public int GetResourceIndex() {
             return resourceIndex;
         }
-        
+
         public float GetAmount() {
             return amount;
         }

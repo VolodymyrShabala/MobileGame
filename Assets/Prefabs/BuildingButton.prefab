@@ -1182,7 +1182,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2441950898585949264}
   - component: {fileID: 2441950898585949265}
-  - component: {fileID: 2054739789004616249}
   - component: {fileID: -6053923816525806553}
   - component: {fileID: 1783392943207009599}
   m_Layer: 5
@@ -1226,29 +1225,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!114 &2054739789004616249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2441950898585949267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3020e096f14d2c34e929e3be3507c809, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildingNameAndAmount: {fileID: 2441950897301360553}
-  buildingDescription: {fileID: 2441950896942339999}
-  buildingCostParent: {fileID: 2441950898442621131}
-  buildingEffectParent: {fileID: 2441950896558106069}
-  buildButtons:
-  - {fileID: 2441950897992526458}
-  - {fileID: 2441950897301360567}
-  defaultTextPrefab: {fileID: 5136897808174660456, guid: 36c8474564ee26d42a734e17c7047545,
-    type: 3}
-  collapsibleButton: {fileID: 2441950897779188248}
-  body: {fileID: 2441950896876073140}
 --- !u!223 &-6053923816525806553
 Canvas:
   m_ObjectHideFlags: 0

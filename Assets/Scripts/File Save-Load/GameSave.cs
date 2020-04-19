@@ -1,16 +1,15 @@
-﻿using Buildings;
+﻿using System;
+using Buildings;
 using Resources;
 
-[System.Serializable]
+[Serializable]
 public class GameSave {
-    private ResourceManager resourceManager;
-    private BuildingManager buildingManager;
-
     public GameSave(ResourceManager resourceManager, BuildingManager buildingManager) {
-        this.resourceManager = resourceManager;
-        this.buildingManager = buildingManager;
+        GetResourceManager = resourceManager;
+        GetBuildingManager = buildingManager;
     }
 
-    public ResourceManager GetResourceManager => resourceManager;
-    public BuildingManager GetBuildingManager => buildingManager;
+    // TODO: Check with saving that it works
+    public ResourceManager GetResourceManager { get; }
+    public BuildingManager GetBuildingManager { get; }
 }

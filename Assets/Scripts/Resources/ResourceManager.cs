@@ -9,13 +9,12 @@ namespace Resources {
 
             Tick.instance.UpdateFunc(Update);
         }
-        
+
         private void Update() {
             int length = GetResourceAmount();
 
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i < length; i++)
                 resources[i].Update();
-            }
         }
 
         public void AddResource(int resourceIndex, float amount) {
@@ -49,7 +48,7 @@ namespace Resources {
 
             resources[resourceIndex].RemoveGainPerSecond(amount);
         }
-        
+
         public void IncreaseStorage(int resourceIndex, float amount) {
             if (!IsInRange(resourceIndex)) {
                 return;

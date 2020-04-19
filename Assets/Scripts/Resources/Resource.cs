@@ -1,12 +1,14 @@
-﻿namespace Resources {
+﻿using System;
+
+namespace Resources {
     public class Resource {
+        private float gainPerSecond;
         private string name;
+
+        public Action<string> onValuesChange;
         private float storageAmount;
         private float storageMax;
-        private float gainPerSecond;
         private bool unlocked;
-        
-        public System.Action<string> onValuesChange;
 
         // TODO: Add consumption info
         // TODO: Add What buildings buffs production and opposite
@@ -30,9 +32,10 @@
             if (storageAmount >= storageMax) {
                 storageAmount = storageMax;
             }
+
             onValuesChange?.Invoke(ToString());
         }
-        
+
         public void AddResources(float amount) {
             storageAmount += amount;
             onValuesChange?.Invoke(ToString());
@@ -62,7 +65,7 @@
             gainPerSecond -= amount;
             onValuesChange?.Invoke(ToString());
         }
-        
+
         public void SetName(string name) {
             this.name = name;
         }
@@ -79,7 +82,7 @@
         public float GetStorageAmount() {
             return storageAmount;
         }
-        
+
         public float GetStorageMax() {
             return storageMax;
         }
@@ -94,7 +97,7 @@
 
         // TODO: Fix decimals
         public override string ToString() {
-           return $"{name}:{storageAmount:F1}/{storageMax:0}({gainPerSecond:F1})";
+            return $"{name}:{storageAmount:F1}/{storageMax:0}({gainPerSecond:F1})";
         }
     }
 }

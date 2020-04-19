@@ -1,17 +1,18 @@
 ﻿using Buildings;
+using Buildings.BuildingButton;
 using Buildings.BuildingEffects;
 using Resources;
 using TMPro;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour {
+    // TODO: Move to Buildings Bootstrap
+    [SerializeField] private BuildingButtonHolder buildingButtonPrefab;
+    [SerializeField] private Transform buildingButtonParent;
+
     // TODO: Move this to Resource Bootstrap
     [SerializeField] private TextMeshProUGUI resourcePrefab;
     [SerializeField] private Transform resourceParent;
-
-    // TODO: Move to Buildings Bootstrap
-    [SerializeField] private BuildingButton buildingButtonPrefab;
-    [SerializeField] private Transform buildingButtonParent;
 
     private void Start() {
         // GameSave gameSave = DataLoader.LoadOrCreateGame();

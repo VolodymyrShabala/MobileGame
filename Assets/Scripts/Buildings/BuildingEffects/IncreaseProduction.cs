@@ -1,7 +1,8 @@
-﻿using Resources;
+﻿using System;
+using Resources;
 
 namespace Buildings.BuildingEffects {
-    [System.Serializable]
+    [Serializable]
     public class IncreaseProduction : BuildingEffect {
         public IncreaseProduction(int resourceIndex = -1, float amount = 0) {
             this.resourceIndex = resourceIndex;

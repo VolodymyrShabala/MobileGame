@@ -1,19 +1,21 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Resources {
     public class ResourceVisual {
         private TextMeshProUGUI[] resourceText;
 
         public ResourceVisual(ResourceManager resourceManager, TextMeshProUGUI resourcePrefab, Transform parent) {
-            UnityEngine.Assertions.Assert.IsNotNull(resourceManager, $"No resourceManager is assigned in ResourceVisual.");
-            UnityEngine.Assertions.Assert.IsNotNull(resourcePrefab, $"No resourcePrefab is assigned in ResourceVisual.");
-            UnityEngine.Assertions.Assert.IsNotNull(parent, $"No parent is assigned in ResourceVisual.");
+            Assert.IsNotNull(resourceManager, "No resourceManager is assigned in ResourceVisual.");
+            Assert.IsNotNull(resourcePrefab, "No resourcePrefab is assigned in ResourceVisual.");
+            Assert.IsNotNull(parent, "No parent is assigned in ResourceVisual.");
 
             CreateResourceText(resourceManager, resourcePrefab, parent);
         }
 
-        private void CreateResourceText(ResourceManager resourceManager, TextMeshProUGUI resourcePrefab, Transform parent) {
+        private void CreateResourceText(ResourceManager resourceManager, TextMeshProUGUI resourcePrefab,
+                                        Transform parent) {
             int length = resourceManager.GetResourceAmount();
             resourceText = new TextMeshProUGUI[length];
 
@@ -26,7 +28,7 @@ namespace Resources {
                 Resource resource = resourceManager.GetResource(i);
                 text.text = resource.ToString();
                 resourceText[i] = text;
-                
+
                 resource.onValuesChange += resourceText[i].SetText;
             }
         }
