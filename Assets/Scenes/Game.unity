@@ -601,7 +601,6 @@ GameObject:
   m_Component:
   - component: {fileID: 250787257}
   - component: {fileID: 250787258}
-  - component: {fileID: 250787259}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -650,23 +649,9 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &250787259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 250787256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90c5babbbb7700c43b620241f616946d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildingButtonPrefab: {fileID: 2054739789004616249, guid: 8b8bf1e1c907a244fb175851ee9e68ae,
-    type: 3}
 --- !u!1 &346528035
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,9 +927,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 511623221}
+  - component: {fileID: 511623223}
   - component: {fileID: 511623222}
   m_Layer: 5
-  m_Name: ViewPort
+  m_Name: Viewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -979,9 +965,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 511623220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 0
+--- !u!222 &511623223
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511623220}
+  m_CullTransparentMesh: 0
 --- !u!1 &725052648
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,7 +987,6 @@ GameObject:
   m_Component:
   - component: {fileID: 725052649}
   - component: {fileID: 725052650}
-  - component: {fileID: 725052651}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1044,20 +1038,6 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &725052651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 725052648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9d5d00a0472b3d47ad5073a9ce0d62b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourcePrefab: {fileID: 494280276133912044, guid: 36c8474564ee26d42a734e17c7047545,
-    type: 3}
 --- !u!1 &742589107
 GameObject:
   m_ObjectHideFlags: 0
@@ -2050,8 +2030,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb108b1739037849a0486dca4601667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceVisual: {fileID: 725052651}
-  buildingVisual: {fileID: 250787259}
+  buildingButtonReferencePrefab: {fileID: 4684373338868544551, guid: 8b8bf1e1c907a244fb175851ee9e68ae,
+    type: 3}
+  buildingButtonParent: {fileID: 250787257}
+  resourcePrefab: {fileID: 5136897808174660456, guid: 36c8474564ee26d42a734e17c7047545,
+    type: 3}
+  resourceParent: {fileID: 725052649}
 --- !u!4 &1894206515
 Transform:
   m_ObjectHideFlags: 0

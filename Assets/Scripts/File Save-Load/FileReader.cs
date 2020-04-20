@@ -4,11 +4,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public static class FileReader {
-    private static string defaultGameSaveFile = "/DefaultGameSave.txt";
-    private static string gameSaveFile = "/GameSave.txt";
-    
+    private static readonly string defaultGameSaveFile = "/DefaultGameSaveTemp.txt";
+    private static readonly string gameSaveFile = "/GameSave.txt";
+
     public static void SaveGame(GameSave gameSave) {
-        string filepath = Application.persistentDataPath + gameSaveFile;
+        string filepath = Application.dataPath + defaultGameSaveFile;
 
         if (File.Exists(filepath)) {
             File.Delete(filepath);
@@ -28,7 +28,7 @@ public static class FileReader {
     }
 
     public static GameSave LoadGame() {
-        string filepath = Application.persistentDataPath + "/GameSave.txt";
+        string filepath = Application.dataPath + defaultGameSaveFile;
         GameSave gameSave;
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream;
@@ -51,9 +51,10 @@ public static class FileReader {
 
         return gameSave;
     }
-    
+
     public static void SaveDefaultGame(GameSave gameSave) {
         string filepath = Application.dataPath + defaultGameSaveFile;
+
         if (File.Exists(filepath)) {
             File.Delete(filepath);
         }
@@ -77,9 +78,8 @@ public static class FileReader {
 
     public static GameSave LoadDefaultGame() {
         string filepath = Application.dataPath + defaultGameSaveFile;
-        
+
         if (!File.Exists(filepath)) {
-            File.Create(filepath);
             return null;
         }
 

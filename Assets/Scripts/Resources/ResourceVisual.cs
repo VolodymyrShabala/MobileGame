@@ -1,72 +1,34 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Resources {
-    public class ResourceVisual : MonoBehaviour {
-        [SerializeField] private GameObject resourcePrefab;
+    public class ResourceVisual {
         private TextMeshProUGUI[] resourceText;
-        private ResourceData resourceData;
-        private bool initialized;
 
-        public void Init(ResourceData resourceData) {
-            if (!resourcePrefab) {
-                Debug.LogError($"No resourcePrefab is assigned in {name}. Aborting game startup.");
-                return;
-            }
+        public ResourceVisual(ResourceManager resourceManager, TextMeshProUGUI resourcePrefab, Transform parent) {
+            Assert.IsNotNull(resourceManager, "No resourceManager is assigned in ResourceVisual.");
+            Assert.IsNotNull(resourcePrefab, "No resourcePrefab is assigned in ResourceVisual.");
+            Assert.IsNotNull(parent, "No parent is assigned in ResourceVisual.");
 
-            if (initialized) {
-                Debug.LogError($"Trying to initialize already initialized class in {name}.");
-                return;
-            }
-
-            initialized = true;
-            this.resourceData = resourceData;
-            CreateResourceText();
+            CreateResourceText(resourceManager, resourcePrefab, parent);
         }
 
-        public void UpdateResources() {
-            if (!initialized) {
-                Debug.Log($"{name} has not been initialized.");
-                return;
-            }
-
-            int length = resourceData.Length;
-
-            for (int i = 0; i < length; i++) {
-                if (!resourceData.IsUnlocked(i)) {
-                    continue;
-                }
-
-                resourceText[i].text = resourceData.GetResource(i).ToString();
-            }
-        }
-
-        public void UpdateResource(int index) {
-            if (!initialized) {
-                Debug.Log($"{name} has not been initialized.");
-                return;
-            }
-
-            if (!resourceData.IsUnlocked(index)) {
-                Debug.Log($"Trying to update locked resource in {name}.");
-                return;
-            }
-
-            resourceText[index].text = resourceData.GetResource(index).ToString();
-        }
-
-        private void CreateResourceText() {
-            int length = resourceData.Length;
+        private void CreateResourceText(ResourceManager resourceManager, TextMeshProUGUI resourcePrefab,
+                                        Transform parent) {
+            int length = resourceManager.GetResourceAmount();
             resourceText = new TextMeshProUGUI[length];
 
             for (int i = 0; i < length; i++) {
-                if (!resourceData.IsUnlocked(i)) {
-                    continue;
-                }
+                TextMeshProUGUI text = Object.Instantiate(resourcePrefab, parent);
+                Resource resource = resourceManager.GetResource(i);
 
-                TextMeshProUGUI text = Instantiate(resourcePrefab, transform).GetComponent<TextMeshProUGUI>();
-                text.text = resourceData.GetResource(i).ToString();
+                if (resource.IsUnlocked()) {
+                    text.text = resource.ToString();
+                }
                 resourceText[i] = text;
+
+                resource.onValuesChange += resourceText[i].SetText;
             }
         }
     }

@@ -1,91 +1,126 @@
-﻿using Resources;
+﻿using UnityEngine;
 
 namespace Buildings {
     public class BuildingManager {
-        private BuildingData buildingData;
-        private readonly BuildingVisual buildingVisual;
-        private ResourceData resourceData; // TODO: Do I really need it here?
+        private readonly Building[] buildings;
+        // private readonly ResourceManager resourceManager;
 
-        // TODO: Maybe move this to the Building struct. It can manage those things by itself
-        private readonly BuildingEffectManager effectManager;
-
-        public BuildingManager(BuildingEffectManager effectManager, BuildingVisual buildingVisual,
-                               ResourceData resourceData, BuildingData buildingData) {
-            this.effectManager = effectManager;
-            this.buildingData = buildingData;
-            this.buildingVisual = buildingVisual;
-            this.resourceData = resourceData;
+        public BuildingManager(Building[] buildings) {
+            this.buildings = buildings;
         }
 
         public void Build(int buildingIndex, int amount = 1) {
-            if (!IsEnoughResources(buildingIndex)) {
-                UnityEngine.Debug.Log("Not enough resources to build.");
+            if (!IsInRange(buildingIndex)) {
                 return;
             }
 
-            buildingData.Build(buildingIndex, amount);
-            effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
+            if (!IsEnoughResources(buildingIndex)) {
+                Debug.Log($"Not enough resources to build {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
+                return;
+            }
+
+            buildings[buildingIndex].Build(amount);
         }
 
         public void Remove(int buildingIndex, int amount = 1) {
-            if (buildingData.GetBuilding(buildingIndex).amount < 1) {
-                UnityEngine.Debug.Log("There are no buildings to remove.");
+            if (!IsInRange(buildingIndex)) {
                 return;
             }
 
-            buildingData.Remove(buildingIndex, amount);
+            if (buildings[buildingIndex].GetAmount() < 1) {
+                Debug.Log($"There are no buildings to remove in {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
+                return;
+            }
+
+            buildings[buildingIndex].Remove(amount);
         }
 
         public void Unlock(int buildingIndex) {
-            if (IsUnlocked(buildingIndex)) {
-                UnityEngine.Debug.Log("Something went wrong in BuildingManager. Trying to unlock unlocked building.");
+            if (!IsInRange(buildingIndex)) {
                 return;
             }
 
-            buildingData.Unlock(buildingIndex);
-            buildingVisual.Unlock(buildingIndex);
+            if (IsUnlocked(buildingIndex)) {
+                Debug.Log($"Trying to unlock unlocked building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
+                return;
+            }
+
+            buildings[buildingIndex].Unlock();
         }
 
         public void Enable(int buildingIndex) {
-            if (IsEnabled(buildingIndex)) {
-                UnityEngine.Debug.Log("Something went wrong in BuildingManager. Trying to enable enabled building.");
+            if (!IsInRange(buildingIndex)) {
                 return;
             }
 
-            buildingData.Enable(buildingIndex);
-            effectManager.ApplyEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
+            if (IsEnabled(buildingIndex)) {
+                Debug.Log($"Trying to enable enabled building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
+                return;
+            }
+
+            buildings[buildingIndex].SetEnabled(true);
         }
 
         public void Disable(int buildingIndex) {
-            if (!IsEnabled(buildingIndex)) {
-                UnityEngine.Debug.Log("Trying to disable disabled building.");
+            if (!IsInRange(buildingIndex)) {
                 return;
             }
 
-            buildingData.Disable(buildingIndex);
-            effectManager.RemoveEffects(buildingData.GetBuilding(buildingIndex).buildingEffects);
+            if (!IsEnabled(buildingIndex)) {
+                Debug.Log($"Trying to disable disabled building at {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
+                return;
+            }
+
+            buildings[buildingIndex].SetEnabled(false);
         }
 
         public bool IsUnlocked(int buildingIndex) {
-            return buildingData.IsUnlocked(buildingIndex);
+            if (!IsInRange(buildingIndex))
+                return false;
+
+            return buildings[buildingIndex].IsUnlocked();
         }
 
-        public bool IsEnabled(int buildingIndex) {
-            return buildingData.IsEnabled(buildingIndex);
+        private bool IsEnabled(int buildingIndex) {
+            return IsInRange(buildingIndex) && buildings[buildingIndex].IsEnabled();
         }
 
-        public bool IsEnoughResources(int buildingIndex) {
-            Building building = buildingData.GetBuilding(buildingIndex);
-            int length = building.buildingCosts.Length;
-
-            for (int i = 0; i < length; i++) {
-                if (!resourceData.IsEnoughResource(building.buildingCosts[i].resourceIndex,
-                                                   building.buildingCosts[i].amount)) {
-                    return false;
-                }
+        // TODO: Need to think about how to do this
+        private bool IsEnoughResources(int buildingIndex) {
+            if (!IsInRange(buildingIndex)) {
+                return false;
             }
 
+            // BuildingCost[] buildingCosts = buildings[buildingIndex].GetCosts();
+            // int length = buildingCosts.Length;
+
+            // for (int i = 0; i < length; i++) {
+            // BuildingCost buildingCost = buildingCosts[i];
+
+            // if (!resourceManager.IsEnoughResources(buildingCost.resourceIndex, buildingCost.amount)) {
+            //     return false;
+            // }
+            // }
+
             return true;
+        }
+
+        public int GetBuildingsAmount() {
+            return buildings.Length;
+        }
+
+        public Building GetBuilding(int buildingIndex) {
+            return !IsInRange(buildingIndex) ? null : buildings[buildingIndex];
+        }
+
+        private bool IsInRange(int buildingIndex) {
+            if (buildingIndex >= 0 && buildingIndex < GetBuildingsAmount()) {
+                return true;
+            }
+
+            Debug.Log($"Trying to access index out of range. Index: {buildingIndex}, Max index allowed: {GetBuildingsAmount() - 1}. {StackTraceUtility.ExtractStackTrace()}");
+
+            return false;
         }
     }
 }
