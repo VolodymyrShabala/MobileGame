@@ -1,20 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Resources {
     public class ResourceManager {
-        private readonly Resource[] resources;
+        private readonly ResourceData resourceData;
+        public Action<int, string> onResourceUpdate;
 
-        public ResourceManager(Resource[] resources) {
-            this.resources = resources;
+        public ResourceManager(ResourceData resourceData) {
+            this.resourceData = resourceData;
 
             Tick.instance.UpdateFunc(Update);
         }
 
         private void Update() {
-            int length = GetResourceAmount();
+            int length = GetNumberOfResources();
 
-            for (int i = 0; i < length; i++)
-                resources[i].Update();
+            for (int i = 0; i < length; i++) {
+                if (!resourceData.resources[i].IsStorageFull() && resourceData.resources[i].IsUnlocked()) {
+                    AddResource(i, resourceData.resources[i].GetGainPerSecond());
+                    onResourceUpdate?.Invoke(i, resourceData.resources[i].ToString());
+                }
+            }
         }
 
         public void AddResource(int resourceIndex, float amount) {
@@ -22,7 +28,17 @@ namespace Resources {
                 return;
             }
 
-            resources[resourceIndex].AddResources(amount);
+            Resource resource = resourceData.resources[resourceIndex];
+            float currentAmount = resource.GetStorageAmount();
+            float maxStorage = resource.GetStorageMax();
+
+            if (currentAmount + amount <= maxStorage) {
+                resource.AddResources(amount);
+            } else {
+                resource.AddResources(maxStorage - currentAmount);
+            }
+
+            resourceData.resources[resourceIndex] = resource;
         }
 
         public void RemoveResource(int resourceIndex, float amount) {
@@ -30,7 +46,16 @@ namespace Resources {
                 return;
             }
 
-            resources[resourceIndex].RemoveResources(amount);
+            Resource resource = resourceData.resources[resourceIndex];
+            float currentAmount = resource.GetStorageAmount();
+
+            if (currentAmount >= amount) {
+                resource.RemoveResources(amount);
+            } else {
+                resource.RemoveResources(amount - currentAmount);
+            }
+
+            resourceData.resources[resourceIndex] = resource;
         }
 
         public void IncreaseProduction(int resourceIndex, float amount) {
@@ -38,7 +63,7 @@ namespace Resources {
                 return;
             }
 
-            resources[resourceIndex].AddGainPerSecond(amount);
+            resourceData.resources[resourceIndex].AddGainPerSecond(amount);
         }
 
         public void DecreaseProduction(int resourceIndex, float amount) {
@@ -46,7 +71,7 @@ namespace Resources {
                 return;
             }
 
-            resources[resourceIndex].RemoveGainPerSecond(amount);
+            resourceData.resources[resourceIndex].RemoveGainPerSecond(amount);
         }
 
         public void IncreaseStorage(int resourceIndex, float amount) {
@@ -54,7 +79,7 @@ namespace Resources {
                 return;
             }
 
-            resources[resourceIndex].AddStorage(amount);
+            resourceData.resources[resourceIndex].AddStorage(amount);
         }
 
         public void DecreaseStorage(int resourceIndex, float amount) {
@@ -62,7 +87,16 @@ namespace Resources {
                 return;
             }
 
-            resources[resourceIndex].RemoveStorage(amount);
+            Resource resource = resourceData.resources[resourceIndex];
+            float maxStorage = resource.GetStorageMax();
+
+            if (maxStorage >= amount) {
+                resource.RemoveStorage(amount);
+            } else {
+                resource.RemoveStorage(amount - maxStorage);
+            }
+
+            resourceData.resources[resourceIndex] = resource;
         }
 
         public void UnlockResource(int resourceIndex) {
@@ -70,11 +104,11 @@ namespace Resources {
                 return;
             }
 
-            resources[resourceIndex].SetUnlocked();
+            resourceData.resources[resourceIndex].SetUnlocked();
         }
 
         public bool IsUnlockedResource(int resourceIndex) {
-            return IsInRange(resourceIndex) && resources[resourceIndex].IsUnlocked();
+            return IsInRange(resourceIndex) && resourceData.resources[resourceIndex].IsUnlocked();
         }
 
         public bool IsEnoughResources(int resourceIndex, float amount) {
@@ -82,24 +116,24 @@ namespace Resources {
                 return false;
             }
 
-            return resources[resourceIndex].GetStorageAmount() >= amount;
+            return resourceData.resources[resourceIndex].GetStorageAmount() >= amount;
         }
 
-        public Resource GetResource(int resourceIndex) {
-            return !IsInRange(resourceIndex) ? null : resources[resourceIndex];
+        public string GetResourceName(int resourceIndex) {
+            return resourceData.resources[resourceIndex].GetName();
         }
 
-        public int GetResourceAmount() {
-            return resources.Length;
+        public int GetNumberOfResources() {
+            return resourceData.resources.Length;
         }
 
-        // TODO: Remove Debug.Log when done
+        // TODO: Remove Debug.Log
         private bool IsInRange(int resourceIndex) {
-            if (resourceIndex >= 0 && resourceIndex < GetResourceAmount()) {
+            if (resourceIndex >= 0 && resourceIndex < GetNumberOfResources()) {
                 return true;
             }
 
-            Debug.Log($"Trying to access index out of range. Index: {resourceIndex}, Max index allowed: {GetResourceAmount() - 1}. {StackTraceUtility.ExtractStackTrace()}");
+            Debug.Log($"Trying to access index out of range. Index: {resourceIndex}, Max index allowed: {GetNumberOfResources() - 1}. {StackTraceUtility.ExtractStackTrace()}");
 
             return false;
         }

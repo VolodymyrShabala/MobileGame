@@ -16,22 +16,26 @@ public class Bootstrap : MonoBehaviour {
 
     private void Start() {
         // GameSave gameSave = DataLoader.LoadOrCreateGame();
-        GameSave gameSave =
-                new GameSave(new ResourceManager(new[] {new Resource("Food", 0, 10, 0, true), new Resource("Wood")}),
-                             new BuildingManager(new[] {
-                                     new Building("Farm", "Produces food", new BuildingCost[0],
-                                                  new BuildingEffect[] {new IncreaseProduction(0, 0.1f)}, 0, true,
-                                                  true),
-                                     new Building("Sawmill", "Produces wood", new[] {new BuildingCost(0, 10)},
-                                                  new BuildingEffect[] {new IncreaseProduction(1, 1)})
-                             }));
+        GameSave gameSave = new GameSave(new ResourceData(new[] {
+                                                 new Resource("Food", 0, 10, 0, true), 
+                                                 new Resource("Wood")
+                                         }),
+                                         new BuildingData(new[] {
+                                                 new Building("Farm", "Produces food", new BuildingCost[0],
+                                                              new BuildingEffect[] {
+                                                                      new IncreaseProduction(0, 1)}, 0, true, true),
+                                                 new Building("Sawmill", "Produces wood", new BuildingCost[0],
+                                                              new BuildingEffect[0])
+                                         }));
 
-        ResourceVisual resourceVisual = new ResourceVisual(gameSave.GetResourceManager, resourcePrefab, resourceParent);
+        ResourceManager resourceManager = new ResourceManager(gameSave.resourceData);
+        ResourceVisual resourceVisual = new ResourceVisual(resourceManager, resourcePrefab, resourceParent);
 
         // TODO: Remove having a copy. Best would be to have it static all the way
-        BuildingEffectManager buildingEffectManager = new BuildingEffectManager(gameSave.GetResourceManager);
+        BuildingEffectManager buildingEffectManager = new BuildingEffectManager(resourceManager);
 
-        BuildingVisual buildingVisual = new BuildingVisual(gameSave.GetBuildingManager, gameSave.GetResourceManager,
+        BuildingManager buildingManager = new BuildingManager(gameSave.buildingData);
+        BuildingVisual buildingVisual = new BuildingVisual(buildingManager, resourceManager,
                                                            buildingButtonReferencePrefab, buildingButtonParent);
     }
 }

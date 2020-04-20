@@ -2,11 +2,11 @@
 
 namespace Buildings {
     public class BuildingManager {
-        private readonly Building[] buildings;
+        private readonly BuildingData buildingData;
         // private readonly ResourceManager resourceManager;
 
-        public BuildingManager(Building[] buildings) {
-            this.buildings = buildings;
+        public BuildingManager(BuildingData buildingData) {
+            this.buildingData = buildingData;
         }
 
         public void Build(int buildingIndex, int amount = 1) {
@@ -19,7 +19,7 @@ namespace Buildings {
                 return;
             }
 
-            buildings[buildingIndex].Build(amount);
+            buildingData.buildings[buildingIndex].Build(amount);
         }
 
         public void Remove(int buildingIndex, int amount = 1) {
@@ -27,12 +27,12 @@ namespace Buildings {
                 return;
             }
 
-            if (buildings[buildingIndex].GetAmount() < 1) {
+            if (buildingData.buildings[buildingIndex].GetAmount() < 1) {
                 Debug.Log($"There are no buildings to remove in {buildingIndex}. {StackTraceUtility.ExtractStackTrace()}");
                 return;
             }
 
-            buildings[buildingIndex].Remove(amount);
+            buildingData.buildings[buildingIndex].Remove(amount);
         }
 
         public void Unlock(int buildingIndex) {
@@ -45,7 +45,7 @@ namespace Buildings {
                 return;
             }
 
-            buildings[buildingIndex].Unlock();
+            buildingData.buildings[buildingIndex].Unlock();
         }
 
         public void Enable(int buildingIndex) {
@@ -58,7 +58,7 @@ namespace Buildings {
                 return;
             }
 
-            buildings[buildingIndex].SetEnabled(true);
+            buildingData.buildings[buildingIndex].SetEnabled(true);
         }
 
         public void Disable(int buildingIndex) {
@@ -71,18 +71,18 @@ namespace Buildings {
                 return;
             }
 
-            buildings[buildingIndex].SetEnabled(false);
+            buildingData.buildings[buildingIndex].SetEnabled(false);
         }
 
         public bool IsUnlocked(int buildingIndex) {
             if (!IsInRange(buildingIndex))
                 return false;
 
-            return buildings[buildingIndex].IsUnlocked();
+            return buildingData.buildings[buildingIndex].IsUnlocked();
         }
 
         private bool IsEnabled(int buildingIndex) {
-            return IsInRange(buildingIndex) && buildings[buildingIndex].IsEnabled();
+            return IsInRange(buildingIndex) && buildingData.buildings[buildingIndex].IsEnabled();
         }
 
         // TODO: Need to think about how to do this
@@ -106,11 +106,11 @@ namespace Buildings {
         }
 
         public int GetBuildingsAmount() {
-            return buildings.Length;
+            return buildingData.buildings.Length;
         }
 
         public Building GetBuilding(int buildingIndex) {
-            return !IsInRange(buildingIndex) ? null : buildings[buildingIndex];
+            return !IsInRange(buildingIndex) ? null : buildingData.buildings[buildingIndex];
         }
 
         private bool IsInRange(int buildingIndex) {

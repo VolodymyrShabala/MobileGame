@@ -56,7 +56,7 @@ namespace Buildings.BuildingButton {
                             Object.Instantiate(buttonReferenceHolder.defaultTextPrefab,
                                                buttonReferenceHolder.buildingCostParent);
 
-                    resourceName.text = resourceManager.GetResource(buildingCosts[i].resourceIndex).GetName();
+                    resourceName.text = resourceManager.GetResourceName(buildingCosts[i].resourceIndex);
                     buildingCostsVisual.Add(resourceName);
 
                     TextMeshProUGUI resourceCost =
@@ -67,7 +67,7 @@ namespace Buildings.BuildingButton {
                     buildingCostsVisual.Add(resourceCost);
                 } else {
                     buildingCostsVisual[index].text =
-                            resourceManager.GetResource(buildingCosts[i].resourceIndex).GetName();
+                            resourceManager.GetResourceName(buildingCosts[i].resourceIndex);
 
                     buildingCostsVisual[index + 1].text = buildingCosts[i].amount.ToString();
                 }
@@ -86,7 +86,7 @@ namespace Buildings.BuildingButton {
                     TextMeshProUGUI effectName = Object.Instantiate(buttonReferenceHolder.defaultTextPrefab,
                                                                     buttonReferenceHolder.buildingEffectParent);
 
-                    effectName.text = resourceManager.GetResource(buildingEffects[i].GetResourceIndex()).GetName();
+                    effectName.text = resourceManager.GetResourceName(buildingEffects[i].GetResourceIndex());
                     buildingEffectsVisual.Add(effectName);
 
                     TextMeshProUGUI effectAmount =
@@ -98,7 +98,7 @@ namespace Buildings.BuildingButton {
                     buildingEffectsVisual.Add(effectAmount);
                 } else {
                     buildingEffectsVisual[index].text =
-                            resourceManager.GetResource(buildingEffects[i].GetResourceIndex()).GetName();
+                            resourceManager.GetResourceName(buildingEffects[i].GetResourceIndex());
 
                     buildingEffectsVisual[index + 1].text = buildingEffects[i].GetAmount().ToString();
                 }

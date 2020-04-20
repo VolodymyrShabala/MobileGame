@@ -4,12 +4,11 @@ using Resources;
 
 [Serializable]
 public class GameSave {
-    public GameSave(ResourceManager resourceManager, BuildingManager buildingManager) {
-        GetResourceManager = resourceManager;
-        GetBuildingManager = buildingManager;
+    public ResourceData resourceData;
+    public BuildingData buildingData;
+    
+    public GameSave(ResourceData resourceData, BuildingData buildingData) {
+        this.resourceData = resourceData;
+        this.buildingData = buildingData;
     }
-
-    // TODO: Check with saving that it works
-    public ResourceManager GetResourceManager { get; }
-    public BuildingManager GetBuildingManager { get; }
 }
