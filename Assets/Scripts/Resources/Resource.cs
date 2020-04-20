@@ -1,10 +1,9 @@
 ﻿using System;
 
 namespace Resources {
-    // TODO: Change to struct
     public struct Resource {
         private string name;
-        private float storageAmount;
+        private float currentAmount;
         private float storageMax;
         private float gainPerSecond;
         private bool unlocked;
@@ -12,36 +11,36 @@ namespace Resources {
         // TODO: Add consumption info
         // TODO: Add What buildings buffs production and opposite
 
-        public Resource(string name, float storageAmount = 0, float storageMax = 0, float gainPerSecond = 0,
+        public Resource(string name, float currentAmount = 0, float storageMax = 0, float gainPerSecond = 0,
                         bool unlocked = false) {
             this.name = name;
-            this.storageAmount = storageAmount;
+            this.currentAmount = currentAmount;
             this.storageMax = storageMax;
             this.gainPerSecond = gainPerSecond;
             this.unlocked = unlocked;
         }
 
         public void AddResources(float amount) {
-            storageAmount += amount;
+            currentAmount += amount;
         }
 
         public void RemoveResources(float amount) {
-            storageAmount -= amount;
+            currentAmount -= amount;
         }
 
-        public void AddStorage(float amount) {
+        public void IncreaseStorage(float amount) {
             storageMax += amount;
         }
 
-        public void RemoveStorage(float amount) {
+        public void DecreaseStorage(float amount) {
             storageMax -= amount;
         }
 
-        public void AddGainPerSecond(float amount) {
+        public void IncreaseGainPerSecond(float amount) {
             gainPerSecond += amount;
         }
 
-        public void RemoveGainPerSecond(float amount) {
+        public void DecreaseGainPerSecond(float amount) {
             gainPerSecond -= amount;
         }
 
@@ -57,8 +56,8 @@ namespace Resources {
             return name;
         }
 
-        public float GetStorageAmount() {
-            return storageAmount;
+        public float GetCurrentAmount() {
+            return currentAmount;
         }
 
         public float GetStorageMax() {
@@ -70,7 +69,7 @@ namespace Resources {
         }
 
         public bool IsStorageFull() {
-            return Math.Abs(storageAmount - storageMax) < 0.001f;
+            return Math.Abs(currentAmount - storageMax) < 0.001f;
         }
 
         public bool IsUnlocked() {
@@ -79,7 +78,7 @@ namespace Resources {
 
         // TODO: Fix decimals
         public override string ToString() {
-            return $"{name}:{storageAmount:F1}/{storageMax:0}({gainPerSecond:F1})";
+            return $"{name}:{currentAmount:F1}/{storageMax:0}({gainPerSecond:F1})";
         }
     }
 }

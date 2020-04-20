@@ -29,7 +29,7 @@ namespace Resources {
             }
 
             Resource resource = resourceData.resources[resourceIndex];
-            float currentAmount = resource.GetStorageAmount();
+            float currentAmount = resource.GetCurrentAmount();
             float maxStorage = resource.GetStorageMax();
 
             if (currentAmount + amount <= maxStorage) {
@@ -47,7 +47,7 @@ namespace Resources {
             }
 
             Resource resource = resourceData.resources[resourceIndex];
-            float currentAmount = resource.GetStorageAmount();
+            float currentAmount = resource.GetCurrentAmount();
 
             if (currentAmount >= amount) {
                 resource.RemoveResources(amount);
@@ -63,7 +63,7 @@ namespace Resources {
                 return;
             }
 
-            resourceData.resources[resourceIndex].AddGainPerSecond(amount);
+            resourceData.resources[resourceIndex].IncreaseGainPerSecond(amount);
         }
 
         public void DecreaseProduction(int resourceIndex, float amount) {
@@ -71,7 +71,7 @@ namespace Resources {
                 return;
             }
 
-            resourceData.resources[resourceIndex].RemoveGainPerSecond(amount);
+            resourceData.resources[resourceIndex].DecreaseGainPerSecond(amount);
         }
 
         public void IncreaseStorage(int resourceIndex, float amount) {
@@ -79,7 +79,7 @@ namespace Resources {
                 return;
             }
 
-            resourceData.resources[resourceIndex].AddStorage(amount);
+            resourceData.resources[resourceIndex].IncreaseStorage(amount);
         }
 
         public void DecreaseStorage(int resourceIndex, float amount) {
@@ -91,9 +91,9 @@ namespace Resources {
             float maxStorage = resource.GetStorageMax();
 
             if (maxStorage >= amount) {
-                resource.RemoveStorage(amount);
+                resource.DecreaseStorage(amount);
             } else {
-                resource.RemoveStorage(amount - maxStorage);
+                resource.DecreaseStorage(amount - maxStorage);
             }
 
             resourceData.resources[resourceIndex] = resource;
@@ -116,7 +116,7 @@ namespace Resources {
                 return false;
             }
 
-            return resourceData.resources[resourceIndex].GetStorageAmount() >= amount;
+            return resourceData.resources[resourceIndex].GetCurrentAmount() >= amount;
         }
 
         public string GetResourceName(int resourceIndex) {
