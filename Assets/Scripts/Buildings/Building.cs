@@ -12,6 +12,8 @@ namespace Buildings {
         private bool unlocked;
 
         public Action onBuild;
+        public Action onNameUpdate;
+        public Action onDescriptionUpdate;
         public Action onCostUpdated;
         public Action onEffectsUpdated;
         public Action<bool> onEnable;
@@ -40,14 +42,14 @@ namespace Buildings {
             onBuild?.Invoke();
         }
 
-        public void Unlock() {
-            unlocked = true;
-            onUnlock?.Invoke();
+        public void SetName(string name) {
+            this.name = name;
+            onNameUpdate?.Invoke();
         }
 
-        public void SetEnabled(bool enabled) {
-            this.enabled = enabled;
-            onEnable?.Invoke(enabled);
+        public void SetDescription(string description) {
+            this.description = description;
+            onDescriptionUpdate?.Invoke();
         }
 
         public void SetCost(BuildingCost[] costs) {
@@ -58,6 +60,16 @@ namespace Buildings {
         public void SetEffects(BuildingEffect[] effects) {
             this.effects = effects;
             onEffectsUpdated?.Invoke();
+        }
+
+        public void Unlock() {
+            unlocked = true;
+            onUnlock?.Invoke();
+        }
+
+        public void SetEnabled(bool enabled) {
+            this.enabled = enabled;
+            onEnable?.Invoke(enabled);
         }
 
         public string GetName() {

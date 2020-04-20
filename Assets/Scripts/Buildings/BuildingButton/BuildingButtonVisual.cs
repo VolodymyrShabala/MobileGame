@@ -4,55 +4,48 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Buildings.BuildingButtons {
-    public class BuildingButton {
+namespace Buildings.BuildingButton {
+    public class BuildingButtonVisual {
         private readonly Building building;
+        private readonly ResourceManager resourceManager;
+        private readonly BuildingButtonReferenceHolder buttonReferenceHolder;
+
         private readonly List<TextMeshProUGUI> buildingCostsVisual = new List<TextMeshProUGUI>();
         private readonly List<TextMeshProUGUI> buildingEffectsVisual = new List<TextMeshProUGUI>();
-        private readonly BuildingButtonHolder buttonHolder;
-        private readonly ResourceManager resourceManager;
 
-        public BuildingButton(Building building, ResourceManager resourceManager, BuildingButtonHolder buttonHolderPrefab,
-                              Transform parent) {
+        public BuildingButtonVisual(Building building, ResourceManager resourceManager,
+                                    BuildingButtonReferenceHolder buttonReferenceHolder) {
             Assert.IsNotNull(building, "building is null in BuildingButton");
             Assert.IsNotNull(resourceManager, "resourceManager is null in BuildingButton");
-            Assert.IsNotNull(buttonHolderPrefab, "buildingButtonHolder is null in BuildingButton");
-            Assert.IsNotNull(parent, "parent is null in BuildingButton");
-
-            buttonHolder = Object.Instantiate(buttonHolderPrefab, parent);
-            buttonHolder.Init();
+            Assert.IsNotNull(buttonReferenceHolder, "buildingButtonHolder is null in BuildingButton");
 
             this.building = building;
             this.resourceManager = resourceManager;
+            this.buttonReferenceHolder = buttonReferenceHolder;
 
-            SubscribeToDelegates();
-            AssignBuildButtons();
-
-            if (!building.IsUnlocked()) {
-                buttonHolder.windowContent.SetActive(false);
-                return;
+            if (building.IsUnlocked()) {
+                Unlock();
+            } else {
+                buttonReferenceHolder.windowContent.SetActive(false);
             }
-
-            UpdateText();
-            UpdateDescription();
-            UpdateCost();
-            UpdateEffect();
+            
+            SwitchBodyVisibility();
         }
 
-        private void UpdateButton() {
-            UpdateText();
+        public void UpdateButton() {
+            UpdateNameAndAmount();
             UpdateCost();
         }
 
-        private void UpdateText() {
-            buttonHolder.buildingNameAndAmount.text = $"{building.GetName()} ({building.GetAmount()})";
+        public void UpdateNameAndAmount() {
+            buttonReferenceHolder.buildingNameAndAmount.text = $"{building.GetName()} ({building.GetAmount()})";
         }
 
-        private void UpdateDescription() {
-            buttonHolder.buildingDescription.text = building.GetDescription();
+        public void UpdateDescription() {
+            buttonReferenceHolder.buildingDescription.text = building.GetDescription();
         }
 
-        private void UpdateCost() {
+        public void UpdateCost() {
             BuildingCost[] buildingCosts = building.GetCosts();
             int length = buildingCosts.Length;
             int index = 0;
@@ -60,13 +53,15 @@ namespace Buildings.BuildingButtons {
             for (int i = 0; i < length; i++) {
                 if (buildingCostsVisual.Count <= index) {
                     TextMeshProUGUI resourceName =
-                            Object.Instantiate(buttonHolder.defaultTextPrefab, buttonHolder.buildingCostParent);
+                            Object.Instantiate(buttonReferenceHolder.defaultTextPrefab,
+                                               buttonReferenceHolder.buildingCostParent);
 
                     resourceName.text = resourceManager.GetResource(buildingCosts[i].resourceIndex).GetName();
                     buildingCostsVisual.Add(resourceName);
 
                     TextMeshProUGUI resourceCost =
-                            Object.Instantiate(buttonHolder.defaultTextPrefab, buttonHolder.buildingCostParent);
+                            Object.Instantiate(buttonReferenceHolder.defaultTextPrefab,
+                                               buttonReferenceHolder.buildingCostParent);
 
                     resourceCost.text = buildingCosts[i].amount.ToString();
                     buildingCostsVisual.Add(resourceCost);
@@ -81,21 +76,22 @@ namespace Buildings.BuildingButtons {
             }
         }
 
-        private void UpdateEffect() {
+        public void UpdateEffect() {
             BuildingEffect[] buildingEffects = building.GetEffects();
             int length = buildingEffects.Length;
             int index = 0;
 
             for (int i = 0; i < length; i++) {
                 if (buildingEffectsVisual.Count <= index) {
-                    TextMeshProUGUI effectName =
-                            Object.Instantiate(buttonHolder.defaultTextPrefab, buttonHolder.buildingEffectParent);
+                    TextMeshProUGUI effectName = Object.Instantiate(buttonReferenceHolder.defaultTextPrefab,
+                                                                    buttonReferenceHolder.buildingEffectParent);
 
                     effectName.text = resourceManager.GetResource(buildingEffects[i].GetResourceIndex()).GetName();
                     buildingEffectsVisual.Add(effectName);
 
                     TextMeshProUGUI effectAmount =
-                            Object.Instantiate(buttonHolder.defaultTextPrefab, buttonHolder.buildingEffectParent);
+                            Object.Instantiate(buttonReferenceHolder.defaultTextPrefab,
+                                               buttonReferenceHolder.buildingEffectParent);
 
                     effectAmount.text = buildingEffects[i].GetAmount().ToString();
 
@@ -111,39 +107,21 @@ namespace Buildings.BuildingButtons {
             }
         }
 
-        private void SetEnable(bool enable) {
+        public void SetEnable(bool enable) {
             // TODO: Add enable/disable visual
         }
 
-        private void Unlock() {
-            buttonHolder.windowContent.SetActive(true);
-            UpdateText();
+        public void Unlock() {
+            buttonReferenceHolder.windowContent.SetActive(true);
+
+            UpdateNameAndAmount();
             UpdateDescription();
             UpdateCost();
             UpdateEffect();
         }
 
-        private void AssignBuildButtons() {
-            int length = buttonHolder.buildButtons.Length;
-
-            for (int i = 0; i < length; i++)
-                buttonHolder.buildButtons[i].onClick.AddListener(() => building.Build());
-        }
-
-        private void SubscribeToDelegates() {
-            building.onBuild += UpdateButton;
-            building.onCostUpdated += UpdateCost;
-            building.onEffectsUpdated += UpdateEffect;
-            building.onEnable += SetEnable;
-            building.onUnlock += Unlock;
-        }
-
-        private void UnsubscribeFromDelegates() {
-            building.onBuild -= UpdateButton;
-            building.onCostUpdated -= UpdateCost;
-            building.onEffectsUpdated -= UpdateEffect;
-            building.onEnable -= SetEnable;
-            building.onUnlock -= Unlock;
+        public void SwitchBodyVisibility() {
+            buttonReferenceHolder.body.SetActive(!buttonReferenceHolder.body.activeInHierarchy);
         }
     }
 }

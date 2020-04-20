@@ -1,5 +1,5 @@
 ﻿using Buildings;
-using Buildings.BuildingButtons;
+using Buildings.BuildingButton;
 using Buildings.BuildingEffects;
 using Resources;
 using TMPro;
@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Bootstrap : MonoBehaviour {
     // TODO: Move to Buildings Bootstrap
-    [SerializeField] private BuildingButtonHolder buildingButtonPrefab;
+    [SerializeField] private BuildingButtonReferenceHolder buildingButtonReferencePrefab;
     [SerializeField] private Transform buildingButtonParent;
 
     // TODO: Move this to Resource Bootstrap
@@ -32,6 +32,6 @@ public class Bootstrap : MonoBehaviour {
         BuildingEffectManager buildingEffectManager = new BuildingEffectManager(gameSave.GetResourceManager);
 
         BuildingVisual buildingVisual = new BuildingVisual(gameSave.GetBuildingManager, gameSave.GetResourceManager,
-                                                           buildingButtonPrefab, buildingButtonParent);
+                                                           buildingButtonReferencePrefab, buildingButtonParent);
     }
 }

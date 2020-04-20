@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace Buildings.BuildingButtons {
-    public class BuildingButtonHolder : MonoBehaviour {
+namespace Buildings.BuildingButton {
+    public class BuildingButtonReferenceHolder : MonoBehaviour {
         public GameObject windowContent;
         public TextMeshProUGUI buildingNameAndAmount;
         public TextMeshProUGUI buildingDescription;
@@ -20,18 +20,6 @@ namespace Buildings.BuildingButtons {
         private bool initialized;
 
         public void Init() {
-            AssertButtonIsReady();
-            initialized = true;
-        
-            collapsibleButton.onClick.AddListener(SwitchBodyVisibility);
-            SwitchBodyVisibility();
-        }
-
-        private void SwitchBodyVisibility() {
-            body.SetActive(!body.activeInHierarchy);
-        }
-
-        private void AssertButtonIsReady() {
             Assert.IsNotNull(windowContent, $"windowContent isn't assigned in {name}.");
             Assert.IsNotNull(buildingNameAndAmount, $"buildingNameAndAmount isn't assigned in {name}.");
             Assert.IsNotNull(buildingDescription, $"buildingDescription isn't assigned in {name}.");
@@ -42,6 +30,8 @@ namespace Buildings.BuildingButtons {
             Assert.IsNotNull(collapsibleButton, $"collapsibleButton isn't assigned in {name}.");
             Assert.IsNotNull(body, $"body isn't assigned in {name}.");
             Assert.IsFalse(initialized, $"Trying to initialize button when it is already initialized in {name}");
+            
+            initialized = true;
         }
     }
 }
