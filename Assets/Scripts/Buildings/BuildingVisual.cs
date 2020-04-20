@@ -1,4 +1,4 @@
-﻿using Buildings.BuildingButton;
+﻿using Buildings.BuildingButtons;
 using Resources;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -20,13 +20,9 @@ namespace Buildings {
             int length = buildingManager.GetBuildingsAmount();
 
             for (int i = 0; i < length; i++) {
-                if (!buildingManager.IsUnlocked(i)) {
-                    continue;
-                }
-
-                BuildingButton.BuildingButton buildingButton =
-                        new BuildingButton.BuildingButton(buildingManager.GetBuilding(i), resourceManager, buildingButtonPrefab,
-                                                          parent);
+                BuildingButton buildingButton =
+                        new BuildingButton(buildingManager.GetBuilding(i), resourceManager, buildingButtonPrefab,
+                                           parent);
             }
         }
     }

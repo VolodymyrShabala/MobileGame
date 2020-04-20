@@ -3,17 +3,19 @@
 namespace Buildings {
     [Serializable]
     public class Building {
-        private int amount;
-        private BuildingCost[] costs;
-        private string description;
-        private BuildingEffect[] effects;
-        private bool enabled;
         private string name;
+        private string description;
+        private BuildingCost[] costs;
+        private BuildingEffect[] effects;
+        private int amount;
+        private bool enabled;
+        private bool unlocked;
 
         public Action onBuild;
         public Action onCostUpdated;
         public Action onEffectsUpdated;
-        private bool unlocked;
+        public Action<bool> onEnable;
+        public Action onUnlock;
 
         public Building(string name, string description, BuildingCost[] costs, BuildingEffect[] effects, int amount = 0,
                         bool enabled = true, bool unlocked = false) {
@@ -40,12 +42,12 @@ namespace Buildings {
 
         public void Unlock() {
             unlocked = true;
-            onBuild?.Invoke();
+            onUnlock?.Invoke();
         }
 
         public void SetEnabled(bool enabled) {
             this.enabled = enabled;
-            onBuild?.Invoke();
+            onEnable?.Invoke(enabled);
         }
 
         public void SetCost(BuildingCost[] costs) {

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Buildings.BuildingButton {
+namespace Buildings.BuildingButtons {
     public class BuildingButton {
         private readonly Building building;
         private readonly List<TextMeshProUGUI> buildingCostsVisual = new List<TextMeshProUGUI>();
@@ -25,13 +25,18 @@ namespace Buildings.BuildingButton {
             this.building = building;
             this.resourceManager = resourceManager;
 
+            SubscribeToDelegates();
+            AssignBuildButtons();
+
+            if (!building.IsUnlocked()) {
+                buttonHolder.windowContent.SetActive(false);
+                return;
+            }
+
             UpdateText();
             UpdateDescription();
             UpdateCost();
             UpdateEffect();
-            AssignBuildButtons();
-
-            SubscribeToDelegates();
         }
 
         private void UpdateButton() {
@@ -106,6 +111,18 @@ namespace Buildings.BuildingButton {
             }
         }
 
+        private void SetEnable(bool enable) {
+            // TODO: Add enable/disable visual
+        }
+
+        private void Unlock() {
+            buttonHolder.windowContent.SetActive(true);
+            UpdateText();
+            UpdateDescription();
+            UpdateCost();
+            UpdateEffect();
+        }
+
         private void AssignBuildButtons() {
             int length = buttonHolder.buildButtons.Length;
 
@@ -117,12 +134,16 @@ namespace Buildings.BuildingButton {
             building.onBuild += UpdateButton;
             building.onCostUpdated += UpdateCost;
             building.onEffectsUpdated += UpdateEffect;
+            building.onEnable += SetEnable;
+            building.onUnlock += Unlock;
         }
 
         private void UnsubscribeFromDelegates() {
             building.onBuild -= UpdateButton;
             building.onCostUpdated -= UpdateCost;
             building.onEffectsUpdated -= UpdateEffect;
+            building.onEnable -= SetEnable;
+            building.onUnlock -= Unlock;
         }
     }
 }

@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace Buildings.BuildingButton {
+namespace Buildings.BuildingButtons {
     public class BuildingButtonHolder : MonoBehaviour {
+        public GameObject windowContent;
         public TextMeshProUGUI buildingNameAndAmount;
         public TextMeshProUGUI buildingDescription;
         public Transform buildingCostParent;
@@ -31,6 +32,7 @@ namespace Buildings.BuildingButton {
         }
 
         private void AssertButtonIsReady() {
+            Assert.IsNotNull(windowContent, $"windowContent isn't assigned in {name}.");
             Assert.IsNotNull(buildingNameAndAmount, $"buildingNameAndAmount isn't assigned in {name}.");
             Assert.IsNotNull(buildingDescription, $"buildingDescription isn't assigned in {name}.");
             Assert.IsNotNull(buildingCostParent, $"buildingCostParent isn't assigned in {name}.");
