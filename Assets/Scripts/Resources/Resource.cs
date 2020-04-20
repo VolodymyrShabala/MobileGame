@@ -2,13 +2,13 @@
 
 namespace Resources {
     public class Resource {
-        private float gainPerSecond;
         private string name;
-
-        public Action<string> onValuesChange;
         private float storageAmount;
         private float storageMax;
+        private float gainPerSecond;
         private bool unlocked;
+        
+        public Action<string> onValuesChange;
 
         // TODO: Add consumption info
         // TODO: Add What buildings buffs production and opposite
