@@ -1,14 +1,13 @@
 ﻿using System;
 
 namespace Resources {
-    public class Resource {
+    // TODO: Change to struct
+    public struct Resource {
         private string name;
         private float storageAmount;
         private float storageMax;
         private float gainPerSecond;
         private bool unlocked;
-        
-        public Action<string> onValuesChange;
 
         // TODO: Add consumption info
         // TODO: Add What buildings buffs production and opposite
@@ -22,48 +21,28 @@ namespace Resources {
             this.unlocked = unlocked;
         }
 
-        public void Update() {
-            if (!unlocked) {
-                return;
-            }
-
-            storageAmount += gainPerSecond;
-
-            if (storageAmount >= storageMax) {
-                storageAmount = storageMax;
-            }
-
-            onValuesChange?.Invoke(ToString());
-        }
-
         public void AddResources(float amount) {
             storageAmount += amount;
-            onValuesChange?.Invoke(ToString());
         }
 
         public void RemoveResources(float amount) {
             storageAmount -= amount;
-            onValuesChange?.Invoke(ToString());
         }
 
         public void AddStorage(float amount) {
             storageMax += amount;
-            onValuesChange?.Invoke(ToString());
         }
 
         public void RemoveStorage(float amount) {
             storageMax -= amount;
-            onValuesChange?.Invoke(ToString());
         }
 
         public void AddGainPerSecond(float amount) {
             gainPerSecond += amount;
-            onValuesChange?.Invoke(ToString());
         }
 
         public void RemoveGainPerSecond(float amount) {
             gainPerSecond -= amount;
-            onValuesChange?.Invoke(ToString());
         }
 
         public void SetName(string name) {
@@ -72,7 +51,6 @@ namespace Resources {
 
         public void SetUnlocked() {
             unlocked = true;
-            onValuesChange?.Invoke(ToString());
         }
 
         public string GetName() {
@@ -89,6 +67,10 @@ namespace Resources {
 
         public float GetGainPerSecond() {
             return gainPerSecond;
+        }
+
+        public bool IsStorageFull() {
+            return Math.Abs(storageAmount - storageMax) < 0.001f;
         }
 
         public bool IsUnlocked() {
