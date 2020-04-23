@@ -4,11 +4,11 @@ using Resources;
 
 [Serializable]
 public class GameSave {
-    public ResourceData resourceData;
-    public BuildingData buildingData;
+    public Resource[] resources;
+    public Building[] buildings;
     
-    public GameSave(ResourceData resourceData, BuildingData buildingData) {
-        this.resourceData = resourceData;
-        this.buildingData = buildingData;
+    public GameSave(Resource[] resources, Building[] buildings) {
+        this.resources = resources;
+        this.buildings = buildings;
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-
-namespace Resources {
+﻿namespace Resources {
+    [System.Serializable]
     public struct Resource {
         private string name;
         private float currentAmount;
@@ -69,7 +68,7 @@ namespace Resources {
         }
 
         public bool IsStorageFull() {
-            return Math.Abs(currentAmount - storageMax) < 0.001f;
+            return UnityEngine.Mathf.Abs(currentAmount - storageMax) < 0.001f;
         }
 
         public bool IsUnlocked() {

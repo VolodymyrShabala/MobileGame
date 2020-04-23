@@ -3,7 +3,7 @@ using Resources;
 
 namespace Buildings {
     [Serializable]
-    public abstract class BuildingEffect { // Remove abstract and try window
+    public class BuildingEffect {
         protected float amount;
         protected int buildingIndex = -1;
         protected int resourceIndex = -1;

@@ -9,9 +9,9 @@ namespace Editor.Tests.EditMode.TestFileReader {
 
         [SetUp]
         public void FileReader_SetUp() {
-            ResourceData resourceData = new ResourceData(new Resource[0]);
-            BuildingData buildingData = new BuildingData(new Building[0]);
-            gameSave = new GameSave(resourceData, buildingData);
+            Resource[] resources = new Resource[0];
+            Building[] buildingData = new Building[0];
+            gameSave = new GameSave(resources, buildingData);
         }
 
         [Test]

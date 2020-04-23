@@ -11,6 +11,7 @@ namespace Buildings {
         private bool enabled;
         private bool unlocked;
 
+        // TODO: Move to manager
         public Action onBuild;
         public Action onNameUpdate;
         public Action onDescriptionUpdate;

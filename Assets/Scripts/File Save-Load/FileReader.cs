@@ -4,12 +4,26 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public static class FileReader {
-    private static readonly string defaultGameSaveFile = "/DefaultGameSaveTemp.txt";
+    private static readonly string defaultGameSaveFile = "/DefaultGameSave.txt";
     private static readonly string gameSaveFile = "/GameSave.txt";
 
     public static void SaveGame(GameSave gameSave) {
-        string filepath = Application.dataPath + defaultGameSaveFile;
+        SaveGame(gameSave, Application.persistentDataPath + gameSaveFile);
+    }
 
+    public static GameSave LoadGame() {
+        return LoadGame(Application.persistentDataPath + gameSaveFile);
+    }
+
+    public static void SaveDefaultGame(GameSave gameSave) {
+        SaveGame(gameSave, Application.dataPath + defaultGameSaveFile);
+    }
+
+    public static GameSave LoadDefaultGame() {
+        return LoadGame(Application.dataPath + defaultGameSaveFile);
+    }
+
+    private static void SaveGame(GameSave gameSave, string filepath) {
         if (File.Exists(filepath)) {
             File.Delete(filepath);
         }
@@ -27,8 +41,11 @@ public static class FileReader {
         }
     }
 
-    public static GameSave LoadGame() {
-        string filepath = Application.dataPath + defaultGameSaveFile;
+    private static GameSave LoadGame(string filepath) {
+        if (!File.Exists(filepath)) {
+            return null;
+        }
+        
         GameSave gameSave;
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream fileStream;
@@ -48,50 +65,6 @@ public static class FileReader {
         }
 
         fileStream.Dispose();
-
-        return gameSave;
-    }
-
-    public static void SaveDefaultGame(GameSave gameSave) {
-        string filepath = Application.dataPath + defaultGameSaveFile;
-
-        if (File.Exists(filepath)) {
-            File.Delete(filepath);
-        }
-
-        string saveData = "";
-
-        try {
-            saveData = JsonUtility.ToJson(gameSave);
-        } catch (Exception exception) {
-            Debug.Log($"Couldn't serialize GameSave to Json. Reason {exception.Message}.");
-            throw;
-        }
-
-        try {
-            File.WriteAllText(filepath, saveData);
-        } catch (Exception exception) {
-            Debug.Log($"Couldn't save game to a file. Reason {exception.Message}.");
-            throw;
-        }
-    }
-
-    public static GameSave LoadDefaultGame() {
-        string filepath = Application.dataPath + defaultGameSaveFile;
-
-        if (!File.Exists(filepath)) {
-            return null;
-        }
-
-        string content = File.ReadAllText(filepath);
-        GameSave gameSave;
-
-        try {
-            gameSave = JsonUtility.FromJson<GameSave>(content);
-        } catch (Exception exception) {
-            Debug.Log($"Couldn't parse GameSave at {filepath}. Reason: {exception.Message}.");
-            throw;
-        }
 
         return gameSave;
     }

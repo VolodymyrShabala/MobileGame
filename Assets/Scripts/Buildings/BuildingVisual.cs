@@ -16,13 +16,14 @@ namespace Buildings {
         }
 
         private void CreateBuildingButtons(BuildingManager buildingManager, ResourceManager resourceManager,
-                                           BuildingButtonReferenceHolder buildingButtonReferencePrefab, Transform parent) {
+                                           BuildingButtonReferenceHolder buildingButtonReferencePrefab,
+                                           Transform parent) {
             int length = buildingManager.GetBuildingsAmount();
 
             for (int i = 0; i < length; i++) {
                 BuildingButtonManager buildingButtonManager =
-                        new BuildingButtonManager(buildingManager.GetBuilding(i), resourceManager, buildingButtonReferencePrefab,
-                                           parent);
+                        new BuildingButtonManager(buildingManager.GetBuilding(i), resourceManager,
+                                                  buildingButtonReferencePrefab, parent);
             }
         }
     }
