@@ -16,11 +16,11 @@ namespace Editor.DefaultGameDataWindow.BuildingWindow {
             amount = buildingCost.amount;
         }
 
-        public void Show() {
+        public void Show(string[] resourceNames) {
             GUILayout.BeginHorizontal();
             GUILayout.Space(horizontalOffset);
 
-            resourceIndex = EditorGUILayout.Popup("Resource", resourceIndex, new[] {"", ""} /*GetResourceNames()*/);
+            resourceIndex = EditorGUILayout.Popup("Resource", resourceIndex, resourceNames);
 
             if (GUILayout.Button("Remove")) {
                 remove = true;

@@ -30,6 +30,10 @@ namespace Editor.DefaultGameDataWindow.ResourceWindow {
             GUILayout.Space(10);
         }
 
+        public string GetName() {
+            return name;
+        }
+
         public Resource GetResource() {
             return new Resource(name, 0, storageMax, 0, unlocked);
         }

@@ -21,24 +21,24 @@ namespace Editor.DefaultGameDataWindow.BuildingWindow {
 
             BuildingCost[] buildingCosts = building.GetCosts();
             int length = buildingCosts.Length;
-            costs = new List<BuildingCostEditorWindow>(length);
+            costs = new List<BuildingCostEditorWindow>();
 
             for (int i = 0; i < length; i++) {
-                costs[i] = new BuildingCostEditorWindow(buildingCosts[i]);
+                costs.Add(new BuildingCostEditorWindow(buildingCosts[i]));
             }
 
             BuildingEffect[] buildingEffects = building.GetEffects();
             length = buildingEffects.Length;
-            effects = new List<BuildingEffectEditorWindow>(length);
+            effects = new List<BuildingEffectEditorWindow>();
 
             for (int i = 0; i < length; i++) {
-                effects[i] = new BuildingEffectEditorWindow(buildingEffects[i]);
+                effects.Add(new BuildingEffectEditorWindow(buildingEffects[i]));
             }
             
             unlocked = building.IsUnlocked();
         }
 
-        public void Show() {
+        public void Show(string[] resourceNames) {
             GUILayout.BeginHorizontal();
 
             name = EditorGUILayout.TextField("Name", name);
@@ -53,13 +53,13 @@ namespace Editor.DefaultGameDataWindow.BuildingWindow {
             foldOutCost = EditorGUILayout.Foldout(foldOutCost, "Building costs");
 
             if (foldOutCost) {
-                ShowCosts();
+                ShowCosts(resourceNames);
             }
 
             foldOutEffect = EditorGUILayout.Foldout(foldOutEffect, "Building effects");
 
             if (foldOutEffect) {
-                ShowEffects();
+                ShowEffects(resourceNames);
             }
 
             unlocked = EditorGUILayout.Toggle("Unlocked", unlocked);
@@ -67,11 +67,11 @@ namespace Editor.DefaultGameDataWindow.BuildingWindow {
             GUILayout.Space(10);
         }
 
-        private void ShowCosts() {
+        private void ShowCosts(string[] resourceNames) {
             int length = costs.Count;
 
             for (int i = 0; i < length; i++) {
-                costs[i].Show();
+                costs[i].Show(resourceNames);
             }
 
             if (GUILayout.Button("Add building cost")) {
@@ -85,11 +85,11 @@ namespace Editor.DefaultGameDataWindow.BuildingWindow {
             }
         }
         
-        private void ShowEffects() {
+        private void ShowEffects(string[] resourceNames) {
             int length = effects.Count;
 
             for (int i = 0; i < length; i++) {
-                effects[i].Show();
+                effects[i].Show(resourceNames);
             }
 
             if (GUILayout.Button("Add building effect")) {
@@ -104,14 +104,14 @@ namespace Editor.DefaultGameDataWindow.BuildingWindow {
         }
 
         public Building GetBuilding() {
-            int length = costs.Capacity;
+            int length = costs.Count;
             BuildingCost[] buildingCosts = new BuildingCost[length];
 
             for (int i = 0; i < length; i++) {
                 buildingCosts[i] = costs[i].GetBuildingCost();
             }
             
-            length = effects.Capacity;
+            length = effects.Count;
             BuildingEffect[] buildingEffects = new BuildingEffect[length];
 
             for (int i = 0; i < length; i++) {

@@ -28,6 +28,7 @@ namespace Editor.DefaultGameDataWindow {
             resourcesEditor.Clear();
             buildingsEditor.Clear();
 
+
             int length = gameSave.resources.Length;
 
             for (int i = 0; i < length; i++) {
@@ -104,7 +105,7 @@ namespace Editor.DefaultGameDataWindow {
             int length = buildingsEditor.Count;
             
             for (int i = 0; i < length; i++) {
-               buildingsEditor[i].Show();
+               buildingsEditor[i].Show(GetResourceNames());
             }
             
             for (int i = 0; i < length; i++) {
@@ -117,6 +118,17 @@ namespace Editor.DefaultGameDataWindow {
                 buildingsEditor.Add(new BuildingEditorWindow(new Building("", "", new BuildingCost[0],
                                                 new BuildingEffect[0])));
             }
+        }
+        
+        private string[] GetResourceNames() {
+            int length = resourcesEditor.Count;
+            string[] resourceNames = new string[length];
+        
+            for (int i = 0; i < length; i++) {
+                resourceNames[i] = resourcesEditor[i].GetName();
+            }
+        
+            return resourceNames;
         }
 
         private void Save() {
